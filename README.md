@@ -8,3 +8,24 @@ Then run command: `java -jar target/save-the-world-1.0-SNAPSHOT.jar`
 
 ## How to Clean
 Run command: `mvn clean`   
+
+
+## Notes:
+
+1. What: Desktop Application 
+	a. UI
+
+2. Purpose: 
+	a. Text PNM automatically based on CSV input.
+	b. Forward any responses to real phone numbers 
+	c. Allow real person to continue conversation.
+
+3. Features:
+
+	a. Twilio automatic messaging 
+	b. Parser for CSV
+	c. Bridge from parsed CSV to auto message 
+	d. Twilio SMS response, hits REST endpoint
+		i. From PNM
+		ii. To PNM (from actives)
+
