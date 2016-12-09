@@ -1,4 +1,4 @@
-package example;
+package com.savetheworld;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
