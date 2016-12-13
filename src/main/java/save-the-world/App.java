@@ -22,7 +22,8 @@ public class App {
   private static final String GREG_PHONE_NUMBER = "+14692379287";
 
   public static void main(String[] args) {
-    Messenger messenger = Messenger.getInstance();
-    messenger.sendSMS(GREG_PHONE_NUMBER, "Testing 1, 2, 3.");
+    //Messenger messenger = Messenger.getInstance();
+    //messenger.sendSMS(GREG_PHONE_NUMBER, "Testing 1, 2, 3.");
+    Parser.parseFile();
   }
 }
