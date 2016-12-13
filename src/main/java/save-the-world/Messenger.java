@@ -26,7 +26,7 @@ public class Messenger {
     }
 
     public boolean sendSMS(String phoneNumber, String messageText) {
-        // Check validity of arguments
+        // Preliminary validity-check of arguments
         boolean validArguments = isValidPhoneNumber(phoneNumber) && isValidMessage(messageText);
 
         // If send messages flag is set and arguments are valid
@@ -51,10 +51,16 @@ public class Messenger {
     // Helper Method(s)
 
     public static boolean isValidPhoneNumber(String phoneNumber){
-        return true;
+        if(phoneNumber == null) return false;
+
+        boolean sufficientLength = phoneNumber.length() > 8;
+        return sufficientLength;
     }
 
     public static boolean isValidMessage(String message){
-        return true;
+        if(message == null) return false;
+
+        boolean sufficientLength = message.length() > 0;
+        return sufficientLength;
     }
 }
