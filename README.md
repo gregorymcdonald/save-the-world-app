@@ -1,5 +1,5 @@
 # **Save the World App**
-**Authors**: Adam Estrin, Greg McDonald  
+**Authors**: Adam Estrin, Greg McDonald, Kieran Vanderslice
 
 ## How to Run
 Run command: `mvn package`   
