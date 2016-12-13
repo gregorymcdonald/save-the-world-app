@@ -40,9 +40,8 @@ public class MessengerTest extends TestCase {
         String validMessageText = "This is some valid message text.";
 
         Messenger instance = Messenger.getInstance();
-        assertTrue(true);
-        //boolean sendSmsResult = instance.sendSMS(validPhoneNumber, validMessageText);
-        //assertTrue("Message should SUCCEED with valid phone number and valid message text.", sendSmsResult);
+        boolean sendSmsResult = instance.sendSMS(validPhoneNumber, validMessageText);
+        assertTrue("Message should SUCCEED with valid phone number and valid message text.", sendSmsResult);
     }
 
     public void testSmsFailure() {
