@@ -64,8 +64,8 @@
       
     <dependency>
       <groupId>com.firebase</groupId>
-      <artifactId>firebase-client</artifactId>
-      <version>1.0.1</version>
+      <artifactId>firebase-client-jvm</artifactId>
+      <version>LATEST</version>
     </dependency>
 
   </dependencies>
