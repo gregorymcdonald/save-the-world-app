@@ -15,7 +15,7 @@ public class Messenger {
     // Singleton instance
     private static Messenger singletonInstance = new Messenger();
 
-    private static final boolean SEND_MESSAGES = true;
+    private static final boolean SEND_MESSAGES = false;
 
     private Messenger() {
         Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
@@ -53,7 +53,7 @@ public class Messenger {
     public static boolean isValidPhoneNumber(String phoneNumber){
         if(phoneNumber == null) return false;
 
-        boolean sufficientLength = phoneNumber.length() > 8;
+        boolean sufficientLength = phoneNumber.length() > 9;
         return sufficientLength;
     }
 
