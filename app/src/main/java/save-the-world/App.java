@@ -16,6 +16,8 @@ import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
 
+import com.firebase.client.Firebase;
+
 import java.util.ArrayList;
 
 public class App {
@@ -25,10 +27,18 @@ public class App {
   private static final String KIERAN_PHONE_NUMBER = "+17136208645";
 
   public static void main(String[] args) {
+    // Test Firebase
+    Firebase myFirebaseRef = new Firebase("https://save-the-world-app.firebaseio.com/");
+    myFirebaseRef.child("message").setValue("Do you have data? You'll love Firebaseee.");
+    System.out.println("Made it!");
+    myFirebaseRef.goOffline();
 
-    //Messenger messenger = Messenger.getInstance();
-    //messenger.sendSMS(GREG_PHONE_NUMBER, "Testing 1, 2, 3.");
-    ArrayList <Contact> contacts = Parser.parseFile();
-    System.out.println(contacts.get(0).getFirstName());
+    // Test messaging
+    //  Messenger messenger = Messenger.getInstance();
+    //  messenger.sendSMS(GREG_PHONE_NUMBER, "Testing 1, 2, 3.");
+
+    // Test parsing
+    // ArrayList <Contact> contacts = Parser.parseFile();
+    // System.out.println(contacts.get(0).getFirstName());
   }
 }
