@@ -19,7 +19,7 @@ public class App {
 
     public static void main(String[] args) {
         // Test Firebase
-        JSONObject result = Database.getInstance().getConversation(TWILIO_PHONE_NUMBER, GREG_PHONE_NUMBER);
+        JSONObject result = Database.getInstance().getAllConversations(TWILIO_PHONE_NUMBER, GREG_PHONE_NUMBER);
         System.out.println(result);
 
         // Test messaging

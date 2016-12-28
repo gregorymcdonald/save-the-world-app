@@ -1,10 +1,8 @@
 package com.savetheworld;
 
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
@@ -25,10 +23,34 @@ public class Database {
         return instance;
     }
 
-    public JSONObject getConversation(String participantPhoneNumber, String otherParticipantPhoneNumber){
+    public JSONObject getAllConversations(String participantPhoneNumber, String otherParticipantPhoneNumber){
         String testUrl = "https://save-the-world-c2795.firebaseio.com/conversations.json";
+        String jsonResult = readDataFromFirebase(testUrl);
+
+        JSONObject result = null;
+        if(jsonResult != null && jsonResult.length() > 0){
+            try {
+                result = (JSONObject) (new JSONParser()).parse(jsonResult);
+            } catch (ParseException pe) {
+                System.err.println("JSON Parse exception occurred.");
+                pe.printStackTrace();
+            }
+        }
+        return result;
+    }
+
+    private String readDataFromFirebase(String urlPath){
+        if(!urlPath.startsWith("https")){
+            System.err.println("Reads from Firebase must use HTTPS.");
+            return null;
+        } else if (!urlPath.endsWith(".json")){
+            System.err.println("Reads from Firebase must return json.");
+            return null;
+        }
+
+        // Attempt the read
         try{
-            URL url = new URL(testUrl);
+            URL url = new URL(urlPath);
             HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.connect();
@@ -44,18 +66,20 @@ public class Database {
                         connectionResult += line;
                     }
                     connectionStreamReader.close();
-                    return (JSONObject) (new JSONParser()).parse(connectionResult);
+                    return connectionResult;
                 default:
                     System.err.println("Connection failed with response code " + responseCode + ".");
+                    break;
             }
         } catch (Exception e) {
-            // XXX: Remove printing
             System.err.println("Error occurred while get conversation over HTTPS.");
         }
         return null;
     }
 
     /* // DEPRECATED BELOW, uses deprecated API
+    import com.firebase.client.Firebase;
+    import com.firebase.client.FirebaseError;
     import java.util.concurrent.atomic.AtomicBoolean;
 
     // Firebase
