@@ -7,36 +7,90 @@ import org.json.simple.parser.ParseException;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
 
+import java.util.Date;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Set;
+
 import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
 
 public class Database {
-  
+
     // Singleton instance
     private static Database instance = new Database();
 
-    private Database(){
+    // Firebase URL
+    private static final String FIREBASE_URL = "https://save-the-world-c2795.firebaseio.com";
 
+    // All ConversationRecord(s) in the database
+    List<ConversationRecord> conversations;
+
+    private Database(){
+        refresh();
     }
 
     public static Database getInstance(){
         return instance;
     }
 
-    public JSONObject getAllConversations(String participantPhoneNumber, String otherParticipantPhoneNumber){
-        String testUrl = "https://save-the-world-c2795.firebaseio.com/conversations.json";
-        String jsonResult = readDataFromFirebase(testUrl);
+    public void refresh(){
+        System.out.println("Refreshing local database instance from remote...");
+        conversations = new ArrayList<ConversationRecord>();
 
-        JSONObject result = null;
-        if(jsonResult != null && jsonResult.length() > 0){
-            try {
-                result = (JSONObject) (new JSONParser()).parse(jsonResult);
-            } catch (ParseException pe) {
-                System.err.println("JSON Parse exception occurred.");
-                pe.printStackTrace();
+        // Read all conversations from Firebase
+        System.out.println("Reading conversations...");
+        String conversationsUrl = FIREBASE_URL + "/conversations.json";
+        String conversationsJsonString = readDataFromFirebase(conversationsUrl);
+        JSONObject conversationsJsonObject = parseJSONObject(conversationsJsonString);
+
+        Set<String> conversationKeys = (Set<String>) conversationsJsonObject.keySet();
+        int numConversations = conversationKeys.size();
+        System.out.println(numConversations + " conversation(s) found.");
+
+        for(String conversationKey : conversationKeys){
+            conversations.add(convertJsonToConversationRecord( (JSONObject) conversationsJsonObject.get(conversationKey)));
+        }
+    }
+
+    public ConversationRecord getConversation(String participantPhoneNumber, String otherParticipantPhoneNumber){
+        for(ConversationRecord conversationRecord : conversations){
+            if((conversationRecord.participant1.equals(participantPhoneNumber) || conversationRecord.participant2.equals(participantPhoneNumber))
+                && (conversationRecord.participant1.equals(otherParticipantPhoneNumber) || conversationRecord.participant2.equals(otherParticipantPhoneNumber))){
+                return new ConversationRecord(conversationRecord);
             }
         }
-        return result;
+        return null;
+    }
+
+    public List<ConversationRecord> getAllConversations(){
+        return new ArrayList<ConversationRecord>(conversations);
+    }
+
+    private ConversationRecord convertJsonToConversationRecord(JSONObject json){
+        String participant1 = (String) json.get("participant1");
+        String participant2 = (String) json.get("participant2");
+        JSONObject messagesJsonObject = (JSONObject) json.get("messages");
+
+        List<MessageRecord> conversationMessages = new ArrayList<MessageRecord>();
+        Set<String> messageKeys = (Set<String>) messagesJsonObject.keySet();
+        int numMessages = messageKeys.size();
+        System.out.println(numMessages + " message(s) found.");
+
+        for(String messageKey : messageKeys){
+            conversationMessages.add(convertJsonToMessageRecord( (JSONObject) messagesJsonObject.get(messageKey)));
+        }
+
+        return new ConversationRecord(participant1, participant2, conversationMessages);
+    }
+
+    private MessageRecord convertJsonToMessageRecord(JSONObject json){
+        String to = (String) json.get("to");
+        String from = (String) json.get("from");
+        String body = (String) json.get("body");
+        Long timestamp = (Long) json.get("timestamp");
+
+        return new MessageRecord(to, from, body, new Date(timestamp));
     }
 
     private String readDataFromFirebase(String urlPath){
@@ -75,6 +129,19 @@ public class Database {
             System.err.println("Error occurred while get conversation over HTTPS.");
         }
         return null;
+    }
+
+    private JSONObject parseJSONObject(String json){
+        JSONObject result = null;
+        if(json != null && json.length() > 0){
+            try {
+                result = (JSONObject) (new JSONParser()).parse(json);
+            } catch (ParseException pe) {
+                System.err.println("JSON Parse exception occurred.");
+                pe.printStackTrace();
+            }
+        }
+        return result;
     }
 
     /* // DEPRECATED BELOW, uses deprecated API
