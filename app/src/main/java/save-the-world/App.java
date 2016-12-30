@@ -19,7 +19,9 @@ public class App {
 
     public static void main(String[] args) {
         // Test Firebase
-        ConversationRecord result = Database.getInstance().getConversation(TWILIO_PHONE_NUMBER, GREG_PHONE_NUMBER);
+        Database db = Database.getInstance();
+        db.pull();
+        ConversationRecord result = db.getConversation(TWILIO_PHONE_NUMBER, GREG_PHONE_NUMBER);
         System.out.println(result);
 
         // Test messaging

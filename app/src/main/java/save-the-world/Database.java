@@ -26,16 +26,26 @@ public class Database {
     // All ConversationRecord(s) in the database
     List<ConversationRecord> conversations;
 
+    /**
+     * Singleton instance constructor.
+     */
     private Database(){
-        refresh();
+        conversations = new ArrayList<ConversationRecord>();
     }
 
+    /**
+     * Update the local copy of the database from the remote. Overrides all local changes that have not been pushed.
+     * @return A Database instance.
+     */
     public static Database getInstance(){
         return instance;
     }
 
-    public void refresh(){
-        System.out.println("Refreshing local database instance from remote...");
+    /**
+     * Update the local copy of the database from the remote. Overrides all local changes that have not been pushed.
+     */
+    public void pull(){
+        System.out.println("Copying database from remote...");
         conversations = new ArrayList<ConversationRecord>();
 
         // Read all conversations from Firebase
@@ -53,6 +63,19 @@ public class Database {
         }
     }
 
+    /**
+     * Update the remote copy of the database from the local changes. Overrides all data stored remotely.
+     */
+    public void push(){
+        System.out.println("Overriding remote database with local copy...");
+    }
+
+    /**
+     * Get a single conversation from the local copy of the database.
+     * @param participantPhoneNumber A String containing a phone number of one participant in the conversation.
+     * @param otherParticipantPhoneNumber A String containing a phone number of the other participant in the conversation.
+     * @return A ConversationRecord corresponding to the conversation between the two input phone numbers, null if a matching conversation cannot be found.
+     */
     public ConversationRecord getConversation(String participantPhoneNumber, String otherParticipantPhoneNumber){
         for(ConversationRecord conversationRecord : conversations){
             if((conversationRecord.participant1.equals(participantPhoneNumber) || conversationRecord.participant2.equals(participantPhoneNumber))
@@ -63,10 +86,20 @@ public class Database {
         return null;
     }
 
+    /**
+     * Get a list of all conversation(s) stored in the local copy of the database.
+     * @return A list of all conversation(s) stored in the local database, represented as ConversationRecord(s).
+     */
     public List<ConversationRecord> getAllConversations(){
         return new ArrayList<ConversationRecord>(conversations);
     }
 
+    /**
+     * Converts a JSONObject to a ConversationRecord.
+     * @param firebaseId The unique ID assigned to the Firebase JSON object.
+     * @param json A JSONObject representing the ConversationRecord.
+     * @return A ConversationRecord containing the data in the input JSON.
+     */
     private ConversationRecord convertJsonToConversationRecord(String firebaseId, JSONObject json){
         String participant1 = (String) json.get("participant1");
         String participant2 = (String) json.get("participant2");
@@ -84,6 +117,12 @@ public class Database {
         return new ConversationRecord(firebaseId, participant1, participant2, conversationMessages);
     }
 
+    /**
+     * Converts a JSONObject to a MessageRecord.
+     * @param firebaseId The unique ID assigned to the Firebase JSON object.
+     * @param json A JSONObject representing the MessageReord.
+     * @return A MessageRecord containing the data in the input JSON.
+     */
     private MessageRecord convertJsonToMessageRecord(String firebaseId, JSONObject json){
         String to = (String) json.get("to");
         String from = (String) json.get("from");
@@ -93,6 +132,11 @@ public class Database {
         return new MessageRecord(firebaseId, to, from, body, new Date(timestamp));
     }
 
+    /**
+     * Reads data from the remote Firebase database.
+     * @param urlPath The URL path to read data from, must include the protocol (HTTPS) and end with ".json"
+     * @return A String containing the result of the request, null if request failed.
+     */
     private String readDataFromFirebase(String urlPath){
         if(!urlPath.startsWith("https")){
             System.err.println("Reads from Firebase must use HTTPS.");
@@ -131,6 +175,11 @@ public class Database {
         return null;
     }
 
+    /**
+     * Parse a JSONObject from a string containing JSON.
+     * @param json A String containing JSON.
+     * @return A JSONObject that that shares the same data as the input JSON.
+     */
     private JSONObject parseJSONObject(String json){
         JSONObject result = null;
         if(json != null && json.length() > 0){
@@ -143,41 +192,4 @@ public class Database {
         }
         return result;
     }
-
-    /* // DEPRECATED BELOW, uses deprecated API
-    import com.firebase.client.Firebase;
-    import com.firebase.client.FirebaseError;
-    import java.util.concurrent.atomic.AtomicBoolean;
-
-    // Firebase
-    private static final String FIREBASE_URL = "https://save-the-world-c2795.firebaseio.com/";
-    private Firebase firebaseReference;
-
-    private Database(){
-        // Database is created in a connected state
-        firebaseReference = new Firebase(FIREBASE_URL);
-    }
-
-    public void saveConversation(String message){
-        final AtomicBoolean done = new AtomicBoolean(false);
-
-        firebaseReference.child("conversations").push().setValue(message, new Firebase.CompletionListener() {
-            @Override
-            public void onComplete(FirebaseError firebaseError, Firebase firebase) {
-                done.set(true);
-            }
-        });
-
-        // Blocks until write completes
-        while (!done.get());
-    }
-
-    public void connect(){
-        firebaseReference.goOnline();
-    }
-
-    public void disconnect(){
-        firebaseReference.goOffline();
-    }
-    */
 }
