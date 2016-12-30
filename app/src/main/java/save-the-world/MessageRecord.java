@@ -5,7 +5,7 @@ import java.util.Date;
 import java.lang.NullPointerException;
 import java.lang.ClassCastException;
 
-public class MessageRecord implements Comparable<MessageRecord> {
+public class MessageRecord extends Record implements Comparable<MessageRecord> {
 
     public String to;
     public String from;
@@ -13,11 +13,12 @@ public class MessageRecord implements Comparable<MessageRecord> {
     // NOTE: this timestamp should be treated as immutable
     public Date timestamp;
 
-    public MessageRecord(String to, String from, String body) {
-        this(to, from, body, new Date());
+    public MessageRecord(String id, String to, String from, String body) {
+        this(id, to, from, body, new Date());
     }
 
-    public MessageRecord(String to, String from, String body, Date timestamp) {
+    public MessageRecord(String id, String to, String from, String body, Date timestamp) {
+        super(id);
         this.to = to;
         this.from = from;
         this.body = body;
@@ -25,6 +26,7 @@ public class MessageRecord implements Comparable<MessageRecord> {
     }
 
     public MessageRecord(MessageRecord messageRecord){
+        super(messageRecord.getId());
         this.to = messageRecord.to;
         this.from = messageRecord.from;
         this.body = messageRecord.body;

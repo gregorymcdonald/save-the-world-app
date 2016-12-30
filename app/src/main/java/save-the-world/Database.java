@@ -49,7 +49,7 @@ public class Database {
         System.out.println(numConversations + " conversation(s) found.");
 
         for(String conversationKey : conversationKeys){
-            conversations.add(convertJsonToConversationRecord( (JSONObject) conversationsJsonObject.get(conversationKey)));
+            conversations.add(convertJsonToConversationRecord(conversationKey, (JSONObject)conversationsJsonObject.get(conversationKey)));
         }
     }
 
@@ -67,7 +67,7 @@ public class Database {
         return new ArrayList<ConversationRecord>(conversations);
     }
 
-    private ConversationRecord convertJsonToConversationRecord(JSONObject json){
+    private ConversationRecord convertJsonToConversationRecord(String firebaseId, JSONObject json){
         String participant1 = (String) json.get("participant1");
         String participant2 = (String) json.get("participant2");
         JSONObject messagesJsonObject = (JSONObject) json.get("messages");
@@ -78,19 +78,19 @@ public class Database {
         System.out.println(numMessages + " message(s) found.");
 
         for(String messageKey : messageKeys){
-            conversationMessages.add(convertJsonToMessageRecord( (JSONObject) messagesJsonObject.get(messageKey)));
+            conversationMessages.add(convertJsonToMessageRecord(messageKey, (JSONObject)messagesJsonObject.get(messageKey)));
         }
 
-        return new ConversationRecord(participant1, participant2, conversationMessages);
+        return new ConversationRecord(firebaseId, participant1, participant2, conversationMessages);
     }
 
-    private MessageRecord convertJsonToMessageRecord(JSONObject json){
+    private MessageRecord convertJsonToMessageRecord(String firebaseId, JSONObject json){
         String to = (String) json.get("to");
         String from = (String) json.get("from");
         String body = (String) json.get("body");
         Long timestamp = (Long) json.get("timestamp");
 
-        return new MessageRecord(to, from, body, new Date(timestamp));
+        return new MessageRecord(firebaseId, to, from, body, new Date(timestamp));
     }
 
     private String readDataFromFirebase(String urlPath){
