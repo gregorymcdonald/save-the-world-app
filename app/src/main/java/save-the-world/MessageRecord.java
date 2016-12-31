@@ -5,6 +5,8 @@ import java.util.Date;
 import java.lang.NullPointerException;
 import java.lang.ClassCastException;
 
+import org.json.simple.JSONObject;
+
 public class MessageRecord extends Record implements Comparable<MessageRecord> {
 
     public String to;
@@ -41,5 +43,18 @@ public class MessageRecord extends Record implements Comparable<MessageRecord> {
         }
 
         return this.timestamp.compareTo(messageRecord.timestamp);
+    }
+
+    /**
+     * Returns a string representation of this MessageRecord in JSON format.
+     * @return A String representation of this MessageRecord in JSON format.
+      */
+    public String toJSONString(){
+        JSONObject json = new JSONObject();
+        json.put("body", this.body);
+        json.put("to", this.to);
+        json.put("from", this.from);
+        json.put("timestamp", this.timestamp.getTime());
+        return json.toJSONString();
     }
 }

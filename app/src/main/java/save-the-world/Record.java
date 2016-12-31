@@ -15,4 +15,10 @@ public abstract class Record {
     public String getId(){
         return id;
     }
+
+    /**
+     * Returns a string representation of this Record in JSON format.
+     * @return A String representation of this Record in JSON format.
+      */
+    public abstract String toJSONString();
 }

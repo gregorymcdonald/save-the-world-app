@@ -24,6 +24,9 @@ public class App {
         ConversationRecord result = db.getConversation(TWILIO_PHONE_NUMBER, GREG_PHONE_NUMBER);
         System.out.println(result);
 
+        db.saveConversation(result);
+        db.push();
+
         // Test messaging
         //  Messenger messenger = Messenger.getInstance();
         //  messenger.sendSMS(GREG_PHONE_NUMBER, "Testing 1, 2, 3.");
