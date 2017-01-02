@@ -45,7 +45,18 @@ public class MessageRecord extends Record implements Comparable<MessageRecord> {
         this.from = messageRecord.from;
         this.body = messageRecord.body;
         this.timestamp = messageRecord.timestamp;
-    }   
+    }
+
+    @Override
+    public boolean equals(Object arg){
+        if(arg == null || !(arg instanceof MessageRecord)){
+            return false;
+        }
+
+        MessageRecord argument = (MessageRecord) arg;
+        return this.to.equals(argument.to) && this.from.equals(argument.from) 
+            && this.body.equals(argument.body) && this.timestamp.equals(argument.timestamp);
+    }    
 
     @Override
     public int compareTo(MessageRecord messageRecord){
