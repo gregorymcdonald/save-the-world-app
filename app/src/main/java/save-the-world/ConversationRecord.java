@@ -37,6 +37,10 @@ public class ConversationRecord extends Record {
         messages.add(messageRecord);
     }
 
+    public boolean removeMessage(MessageRecord messageRecord){
+        return messages.remove(messageRecord);
+    }
+
     public List<MessageRecord> getAllMessages(){
         Collections.sort(messages);
         return new ArrayList<MessageRecord>(messages);
