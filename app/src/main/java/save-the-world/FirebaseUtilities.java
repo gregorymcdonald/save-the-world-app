@@ -17,6 +17,16 @@ public class FirebaseUtilities {
     // Length of Firebase ID
     private static final int FIREBASE_ID_LENGTH = 19;
 
+    public static String generateUniqueId(){
+        String uniqueId = "";
+        for(int i = 0; i < FIREBASE_ID_LENGTH; ++i){
+            int randomCharacterIndex = (int) (Math.random() * FIREBASE_ID_CHARACTER_SET.length());
+            uniqueId += FIREBASE_ID_CHARACTER_SET.charAt(randomCharacterIndex);
+        }
+
+        return uniqueId;
+    }
+
     /**
      * Reads data from the remote Firebase database.
      * @param urlPath The URL path to read data from, must include the protocol (HTTPS) and end with ".json"

@@ -66,7 +66,7 @@ public class Database {
             if(conversationId != null && conversationId.length() > 0){
                 conversationsJsonObject.put(conversation.getId(), conversationJSONObject);
             } else {
-                conversationsJsonObject.put("NO_ID_ERROR", conversationJSONObject);
+                conversationsJsonObject.put("ERROR_NO_CONVERSATION_ID", conversationJSONObject);
             }
         }
 

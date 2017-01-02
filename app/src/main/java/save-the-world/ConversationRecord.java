@@ -12,6 +12,13 @@ public class ConversationRecord extends Record {
     public String participant2;
     private List<MessageRecord> messages;
 
+    public ConversationRecord(String participant1, String participant2, List<MessageRecord> messages) {
+        super();
+        this.participant1 = participant1;
+        this.participant2 = participant2;
+        this.messages = new ArrayList<MessageRecord>(messages);
+    }
+
     public ConversationRecord(String id, String participant1, String participant2, List<MessageRecord> messages) {
         super(id);
         this.participant1 = participant1;
@@ -39,6 +46,7 @@ public class ConversationRecord extends Record {
      * Returns a string representation of this ConversationRecord in JSON format.
      * @return A String representation of this ConversationRecord in JSON format.
       */
+    @Override
     public String toJSONString(){
         JSONObject json = new JSONObject();
         json.put("participant1", this.participant1);
@@ -51,7 +59,7 @@ public class ConversationRecord extends Record {
             if(messageId != null && messageId.length() > 0){
                 messagesJSONObject.put(message.getId(), messageJSONObject);
             } else {
-                messagesJSONObject.put("NO_ID_ERROR", messageJSONObject);
+                messagesJSONObject.put("ERROR_NO_MESSAGE_ID", messageJSONObject);
             }
         }
         json.put("messages", messagesJSONObject);

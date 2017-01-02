@@ -15,8 +15,20 @@ public class MessageRecord extends Record implements Comparable<MessageRecord> {
     // NOTE: this timestamp should be treated as immutable
     public Date timestamp;
 
+    public MessageRecord(String to, String from, String body) {
+        this(to, from, body, new Date());
+    }
+
     public MessageRecord(String id, String to, String from, String body) {
         this(id, to, from, body, new Date());
+    }
+
+    public MessageRecord(String to, String from, String body, Date timestamp) {
+        super();
+        this.to = to;
+        this.from = from;
+        this.body = body;
+        this.timestamp = timestamp;
     }
 
     public MessageRecord(String id, String to, String from, String body, Date timestamp) {
@@ -33,8 +45,9 @@ public class MessageRecord extends Record implements Comparable<MessageRecord> {
         this.from = messageRecord.from;
         this.body = messageRecord.body;
         this.timestamp = messageRecord.timestamp;
-    }
+    }   
 
+    @Override
     public int compareTo(MessageRecord messageRecord){
         if(messageRecord == null){
             throw new NullPointerException("Specified object is null in comparison of MessageRecord(s).");
@@ -49,6 +62,7 @@ public class MessageRecord extends Record implements Comparable<MessageRecord> {
      * Returns a string representation of this MessageRecord in JSON format.
      * @return A String representation of this MessageRecord in JSON format.
       */
+    @Override
     public String toJSONString(){
         JSONObject json = new JSONObject();
         json.put("body", this.body);
