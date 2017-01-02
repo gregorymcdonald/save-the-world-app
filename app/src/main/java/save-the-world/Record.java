@@ -5,7 +5,7 @@ public abstract class Record {
     private String id;
 
     public Record(){
-        this.id = FirebaseUtilities.generateUniqueId();
+        this.id = "";
     }
 
     public Record(String id) {
