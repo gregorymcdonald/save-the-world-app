@@ -16,14 +16,14 @@ public class ConversationRecord extends Record {
         super();
         this.participant1 = participant1;
         this.participant2 = participant2;
-        this.messages = new ArrayList<MessageRecord>(messages);
+        this.messages = (messages != null) ? new ArrayList<MessageRecord>(messages) : new ArrayList<MessageRecord>();
     }
 
     public ConversationRecord(String id, String participant1, String participant2, List<MessageRecord> messages) {
         super(id);
         this.participant1 = participant1;
         this.participant2 = participant2;
-        this.messages = new ArrayList<MessageRecord>(messages);
+        this.messages = (messages != null) ? new ArrayList<MessageRecord>(messages) : new ArrayList<MessageRecord>();
     }
 
     public ConversationRecord(ConversationRecord conversationRecord) {
@@ -41,7 +41,7 @@ public class ConversationRecord extends Record {
         return messages.remove(messageRecord);
     }
 
-    public List<MessageRecord> getAllMessages(){
+    public List<MessageRecord> getMessages(){
         Collections.sort(messages);
         return new ArrayList<MessageRecord>(messages);
     }
