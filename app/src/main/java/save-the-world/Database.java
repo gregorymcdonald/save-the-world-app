@@ -109,6 +109,27 @@ public class Database {
      * @param conversationRecord The ConversationRecord to save.
      */
     public void saveConversation(ConversationRecord conversationRecord){
-        // XXX write me
+        if(conversationRecord == null){
+            return;
+        }
+
+        // Assign unique ID to the conversation if it does not have one
+        String conversationId = conversationRecord.getId();
+        if(conversationId == null || conversationId.length() <= 0){
+            conversationRecord.setId(FirebaseUtilities.generateUniqueId());
+        }
+
+        // Assign unique ID(s) to the conversation messages if it does not have one
+        List<MessageRecord> conversationMessages = conversationRecord.getMessages();
+        for(MessageRecord message : conversationMessages){
+            String messageId = message.getId();
+            if(messageId == null || messageId.length() <= 0){
+                conversationRecord.removeMessage(message);
+                message.setId(FirebaseUtilities.generateUniqueId());
+                conversationRecord.addMessage(message);
+            }
+        }
+
+        conversations.add(conversationRecord);
     }
 }

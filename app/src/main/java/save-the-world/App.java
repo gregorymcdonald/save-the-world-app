@@ -7,6 +7,7 @@ import com.twilio.type.PhoneNumber;
 import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class App {
     // The phone number from which messages are sent.
@@ -24,7 +25,9 @@ public class App {
         ConversationRecord result = db.getConversation(TWILIO_PHONE_NUMBER, GREG_PHONE_NUMBER);
         System.out.println(result.toJSONString());
 
-        db.saveConversation(result);
+        ConversationRecord test = new ConversationRecord(TWILIO_PHONE_NUMBER, ADAM_PHONE_NUMBER, null);
+        test.addMessage(new MessageRecord(ADAM_PHONE_NUMBER, TWILIO_PHONE_NUMBER, "Hi Adam!", new Date()));
+        db.saveConversation(test);
         db.push();
 
         // Test messaging
