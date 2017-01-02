@@ -22,7 +22,7 @@ public class App {
         Database db = Database.getInstance();
         db.pull();
         ConversationRecord result = db.getConversation(TWILIO_PHONE_NUMBER, GREG_PHONE_NUMBER);
-        System.out.println(result);
+        System.out.println(result.toJSONString());
 
         db.saveConversation(result);
         db.push();
