@@ -81,7 +81,7 @@ public class Database {
             conversationsURL = FirebaseUtilities.FIREBASE_URL + "/test_conversations.json";
         }
 
-        // Override remote conversations
+        // Convert list of ConversationRecord(s) into a JSONObject
         JSONObject conversationsJsonObject = new JSONObject();
         for(ConversationRecord conversation : conversations) {
             String conversationId = conversation.getId();
@@ -93,6 +93,7 @@ public class Database {
             }
         }
 
+        // Write the conversations JSON object to Firebase
         String conversationsWriteResult = FirebaseUtilities.writeDataToFirebase(conversationsURL, conversationsJsonObject.toJSONString());
         System.out.println(conversationsWriteResult);
 
@@ -154,6 +155,17 @@ public class Database {
         }
 
         conversations.add(conversationRecord);
+
+        // Save the conversation in the remote database
+        String conversationURL;
+        if(!testMode){
+            conversationURL = FirebaseUtilities.FIREBASE_URL + "/conversations/";
+        } else {
+            conversationURL = FirebaseUtilities.FIREBASE_URL + "/test_conversations/";
+        }
+        conversationURL += conversationRecord.getId() + ".json";
+        String conversationWriteResult = FirebaseUtilities.writeDataToFirebase(conversationURL, conversationRecord.toJSONString());
+        //System.out.println(conversationWriteResult);
     }
 
     /**
