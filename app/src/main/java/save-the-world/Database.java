@@ -11,6 +11,10 @@ public class Database {
     // Singleton instance
     private static Database instance = new Database();
 
+    // Test Mode
+    // If enabled, remote is stored at a different location as to not clobber the real data.
+    private boolean testMode;
+
     // All ConversationRecord(s) in the database
     List<ConversationRecord> conversations;
 
@@ -18,6 +22,7 @@ public class Database {
      * Singleton instance constructor.
      */
     private Database(){
+        testMode = false;
         conversations = new ArrayList<ConversationRecord>();
     }
 
@@ -46,7 +51,12 @@ public class Database {
 
         // Read all conversations from Firebase
         System.out.println("Reading conversations...");
-        String conversationsUrl = FirebaseUtilities.FIREBASE_URL + "/conversations.json";
+        String conversationsUrl;
+        if(!testMode){
+            conversationsUrl = FirebaseUtilities.FIREBASE_URL + "/conversations.json";
+        } else {
+            conversationsUrl = FirebaseUtilities.FIREBASE_URL + "/test_conversations.json";
+        }
         String conversationsJsonString = FirebaseUtilities.readDataFromFirebase(conversationsUrl);
         JSONObject conversationsJsonObject = JSONUtilities.createJSONObject(conversationsJsonString);
 
@@ -64,7 +74,12 @@ public class Database {
      */
     public void push(){
         System.out.println("Overriding remote database with local copy...");
-        String conversationsURL = FirebaseUtilities.FIREBASE_URL + "/conversations.json";
+        String conversationsURL;
+        if(!testMode){
+            conversationsURL = FirebaseUtilities.FIREBASE_URL + "/conversations.json";
+        } else {
+            conversationsURL = FirebaseUtilities.FIREBASE_URL + "/test_conversations.json";
+        }
 
         // Override remote conversations
         JSONObject conversationsJsonObject = new JSONObject();
@@ -81,8 +96,8 @@ public class Database {
         String conversationsWriteResult = FirebaseUtilities.writeDataToFirebase(conversationsURL, conversationsJsonObject.toJSONString());
         System.out.println(conversationsWriteResult);
 
-        // Set the "lastUpdated" field of the remoteDatabase to the current time
-        String lastUpdatedURL = FirebaseUtilities.FIREBASE_URL + "/lastUpdated.json";
+        // Set the "lastUpdated" field of the remote database to the current time
+        String lastUpdatedURL = FirebaseUtilities.FIREBASE_URL + "/last_updated.json";
         String currentTimeInMilliseconds = "" + System.currentTimeMillis();
         String lastUpdatedWriteResult = FirebaseUtilities.writeDataToFirebase(lastUpdatedURL, currentTimeInMilliseconds);
         System.out.println("Remote database now last updated at time: " + lastUpdatedWriteResult);
@@ -139,5 +154,19 @@ public class Database {
         }
 
         conversations.add(conversationRecord);
+    }
+
+    /**
+     * Enable test mode.
+     */
+    public void enableTestMode(){
+        this.testMode = true;
+    }
+
+    /**
+     * Disable test mode.
+     */
+    public void disableTestMode(){
+        this.testMode = false;
     }
 }

@@ -45,6 +45,7 @@ public class DatabaseTest extends TestCase {
      */
     public void test_clear() {
         Database db = Database.getInstance();
+        db.enableTestMode();
         db.clear();
         assertTrue("After clear database should be empty.", db.getAllConversations().size() == 0);
         db.pull();
@@ -57,6 +58,7 @@ public class DatabaseTest extends TestCase {
      */
     public void test_pull() {
         Database db = Database.getInstance();
+        db.enableTestMode();
         db.clear();
         db.pull();
         assertTrue("After pull database should not be empty.", db.getAllConversations().size() > 0);
@@ -67,6 +69,7 @@ public class DatabaseTest extends TestCase {
      */
     public void test_push() {
         Database db = Database.getInstance();
+        db.enableTestMode();
         db.clear();
         db.pull();
         int numConversationsBeforePush = db.getAllConversations().size();
@@ -84,6 +87,7 @@ public class DatabaseTest extends TestCase {
      */
     public void test_getAllConversations() {
         Database db = Database.getInstance();
+        db.enableTestMode();
         db.clear();
         assertNotNull("Conversations list should not be null before pulling.", db.getAllConversations());
         db.pull();
@@ -96,6 +100,7 @@ public class DatabaseTest extends TestCase {
      */
     public void test_getConversation_saveConversation() {
         Database db = Database.getInstance();
+        db.enableTestMode();
         db.clear();
         ConversationRecord test = new ConversationRecord(TWILIO_PHONE_NUMBER, ADAM_PHONE_NUMBER, null);
         test.addMessage(new MessageRecord(ADAM_PHONE_NUMBER, TWILIO_PHONE_NUMBER, "Hi Adam!", new Date()));
