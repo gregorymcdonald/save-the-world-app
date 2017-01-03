@@ -9,7 +9,16 @@ import javafx.stage.Stage;
 public class GUI extends Application {
 
     public static MainViewController mainView;
-    
+
+    public static final String MAIN_SCREEN = "MainView";
+    public static final String MAIN_SCREEN_FXML = "/MainView.fxml";
+    public static final String SIDE_MENU_SCREEN = "SideMenuView";
+    public static final String SIDE_MENU_SCREEN_FXML = "/SidePanelContent.fxml";
+    public static final String CONTACTS_SCREEN = "ContactsView";
+    public static final String CONTACTS_SCREEN_FXML = "/ContactsView.fxml";
+    public static final String MESSAGE_SCREEN = "MessageView";
+    public static final String MESSAGE_SCREEN_FXML = "/MessageView.fxml";
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         
@@ -23,37 +32,5 @@ public class GUI extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
-
-    // private void layoutContactsTableView(Scene scene) {
-
-    //     TableView <Contact> table = new TableView <Contact>(FXCollections.observableArrayList(Parser.parseFile()));
-       
-    //     final Label label = new Label("Contacts");
-    //     label.setFont(new Font("Arial", 20));
-
-    //     table.setEditable(true);
-
-    //     TableColumn firstNameCol = new TableColumn("First Name");
-    //     firstNameCol.setMinWidth(100);
-    //     firstNameCol.setCellValueFactory(new PropertyValueFactory <Contact, String> ("firstName"));
-
-    //     TableColumn lastNameCol = new TableColumn("Last Name");
-    //     lastNameCol.setMinWidth(100);
-    //     lastNameCol.setCellValueFactory(new PropertyValueFactory <Contact, String> ("lastName"));
-        
-    //     TableColumn emailCol = new TableColumn("Phone Number");
-    //     emailCol.setMinWidth(200);
-    //     emailCol.setCellValueFactory(new PropertyValueFactory <Contact, String> ("phoneNumber"));
-        
-    //     table.getColumns().addAll(firstNameCol, lastNameCol, emailCol);
-        
-    
-    //     final VBox vbox = new VBox();
-    //     vbox.setSpacing(5);
-    //     vbox.setPadding(new Insets(10, 0, 0, 10));
-    //     vbox.getChildren().addAll(label, table);
-
-    //     ((Group) scene.getRoot()).getChildren().addAll(vbox);
-    // }
 
 }

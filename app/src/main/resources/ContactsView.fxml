@@ -5,10 +5,10 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 
-<AnchorPane fx:id="containerAnchorPane" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.savetheworld.ContactsViewController">
+<AnchorPane fx:id="containerAnchorPane" prefHeight="361.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.savetheworld.ContactsViewController">
    <children>
-      <JFXButton fx:id="newContactBtn" buttonType="RAISED" layoutX="527.0" layoutY="320.0" onMouseClicked="#addNewContactAction" ripplerFill="#ab2d2d" text="Add New Contact" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="320.0" />
-      <JFXButton fx:id="downloadIFCBtn" buttonType="RAISED" layoutX="14.0" layoutY="320.0" onMouseClicked="#downloadIFCAction" text="Downlod IFC" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="320.0" />
+      <JFXButton fx:id="newContactBtn" buttonType="RAISED" layoutX="527.0" layoutY="320.0" onMouseClicked="#addNewContactAction" ripplerFill="#ab2d2d" text="Add New Contact" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+      <JFXButton fx:id="downloadIFCBtn" buttonType="RAISED" layoutX="14.0" layoutY="320.0" onMouseClicked="#downloadIFCAction" text="Downlod IFC" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" />
       <JFXTreeTableView fx:id="tableView" editable="true" prefHeight="327.0" prefWidth="606.0" tableMenuButtonVisible="true" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
    </children>
 </AnchorPane>

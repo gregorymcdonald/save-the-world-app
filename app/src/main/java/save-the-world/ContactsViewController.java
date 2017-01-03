@@ -17,7 +17,10 @@ import javafx.collections.FXCollections;
 import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 
-public class ContactsViewController {
+public class ContactsViewController implements ControlledScreen {
+
+
+	private ScreensController controller;
 
     @FXML
     private ResourceBundle resources;
@@ -87,5 +90,11 @@ public class ContactsViewController {
         tableView.getColumns().setAll(firstName, lastName, phoneNumber);
         tableView.setRoot(root);
         tableView.setShowRoot(false);
+
+        System.out.println("Initialized ContactsViewController...");
+    }
+
+    public void setScreenParent(ScreensController screenParent) {
+    	controller = screenParent;
     }
 }

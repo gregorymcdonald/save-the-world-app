@@ -9,7 +9,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.layout.AnchorPane;
 
 
-public class SidePanelContentController implements Initializable {
+public class SidePanelContentController implements Initializable, ControlledScreen {
+
+    private ScreensController controller;
 
     @FXML
     private JFXButton b1;
@@ -33,13 +35,14 @@ public class SidePanelContentController implements Initializable {
         switch(btn.getText())
         {
             case "Contacts":
-                GUI.mainView.setContainerViewToView(MainViewController.ContainerViews.CONTACTS);
+                controller.setScreen(GUI.CONTACTS_SCREEN);
                 break;
             case "Messages":
-                GUI.mainView.setContainerViewToView(MainViewController.ContainerViews.MESSAGES);
+                controller.setScreen(GUI.MESSAGE_SCREEN);
+                //GUI.mainView.setContainerViewToView(MainViewController.ContainerViews.MESSAGES);
                 break;
             case "Settings":
-                GUI.mainView.setContainerViewToView(MainViewController.ContainerViews.SETTINGS);
+                //GUI.mainView.setContainerViewToView(MainViewController.ContainerViews.SETTINGS);
                 break;
         }
     }
@@ -47,5 +50,9 @@ public class SidePanelContentController implements Initializable {
     @FXML
     private void exit(ActionEvent event) {
         System.exit(0);
+    }
+
+    public void setScreenParent(ScreensController screenParent) {
+        controller = screenParent;
     }  
 }

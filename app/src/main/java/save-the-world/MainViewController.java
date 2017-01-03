@@ -1,67 +1,48 @@
 package com.savetheworld;
 
+import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXHamburger;
-import com.jfoenix.transitions.hamburger.HamburgerBackArrowBasicTransition;
-import javafx.fxml.FXML;
-import javafx.scene.input.MouseEvent;
-import javafx.fxml.Initializable;
 import java.net.URL;
 import java.util.ResourceBundle;
-import com.jfoenix.controls.JFXDrawer;
+import javafx.fxml.FXML;
+import javafx.scene.SubScene;
+import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.Group;
+
 import java.io.IOException;
 import javafx.scene.layout.VBox;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.scene.control.Label;
+import com.jfoenix.transitions.hamburger.HamburgerBackArrowBasicTransition;
 import javafx.fxml.FXMLLoader;
 
-public class MainViewController implements Initializable {
+public class MainViewController {
 
-	public enum ContainerViews {
-		CONTACTS,
-		MESSAGES,
-		SETTINGS 
-	}
+	private HamburgerBackArrowBasicTransition transition;
+	private ScreensController mainController;
+
+    @FXML
+    private ResourceBundle resources;
+
+    @FXML
+    private URL location;
+
+    @FXML
+    private SubScene mainScene;
+
+    @FXML
+    private AnchorPane headerAnchorPane;
 
     @FXML
     private JFXHamburger menuBtn;
 
     @FXML
-    private JFXDrawer drawer;
-
-    @FXML
-    private AnchorPane containerAnchorPane;
-
-    @FXML
     private Label titleLabel;
 
     @FXML
-    private AnchorPane headerAnchorPane;
-
-    private HamburgerBackArrowBasicTransition transition;
-  
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-
-    	assert containerAnchorPane != null : "fx:id=\"containerAnchorPane\" was not injected: check your FXML file 'MainView.fxml'.";
-        assert drawer != null : "fx:id=\"drawer\" was not injected: check your FXML file 'MainView.fxml'.";
-        assert headerAnchorPane != null : "fx:id=\"headerAnchorPane\" was not injected: check your FXML file 'MainView.fxml'.";
-        assert menuBtn != null : "fx:id=\"menuBtn\" was not injected: check your FXML file 'MainView.fxml'.";
-        assert titleLabel != null : "fx:id=\"titleLabel\" was not injected: check your FXML file 'MainView.fxml'.";
-
-        System.out.println("Initilized MainViewController...");
-    	transition = new HamburgerBackArrowBasicTransition(menuBtn);
-    	transition.setRate(-1);
-    	
-    	try {
-    		FXMLLoader loader = new FXMLLoader(getClass().getResource("/SidePanelContent.fxml"));
-    	    VBox box = loader.load();
-    	    drawer.setSidePane(box);
-    	} catch (IOException ex) {
-    	    Logger.getLogger(MainViewController.class.getName()).log(Level.SEVERE, null, ex);
-    	}
-    }   
+    private JFXDrawer drawer;
 
     @FXML
     void menuBtnAction(MouseEvent event) {
@@ -69,32 +50,42 @@ public class MainViewController implements Initializable {
         toggleSideMenu();
     }
 
-    void setContainerViewToView(ContainerViews view) {
-    	switch(view) {
-    		case CONTACTS:
-    			try {
-    				FXMLLoader loader = new FXMLLoader(getClass().getResource("/ContactsView.fxml"));
-    	    		containerAnchorPane.getChildren().add(loader.load());
-    	    	} catch (IOException ex) {
-    	    		 Logger.getLogger(MainViewController.class.getName()).log(Level.SEVERE, null, ex);
-    	    	}
-    			//containerAnchorPane.setStyle("-fx-background-color:#00FF00");
-    			titleLabel.setText("Contacts");
-    			break;
-    		case MESSAGES:
-    			containerAnchorPane.setStyle("-fx-background-color:#0000FF");
-    			titleLabel.setText("Messages");
-    			break;
-    		case SETTINGS:
-    			containerAnchorPane.setStyle("-fx-background-color:#FF0000");
-    			titleLabel.setText("Settings");
-    			break;
+    @FXML
+    void initialize() {
+        assert mainScene != null : "fx:id=\"mainScene\" was not injected: check your FXML file 'MainView.fxml'.";
+        assert headerAnchorPane != null : "fx:id=\"headerAnchorPane\" was not injected: check your FXML file 'MainView.fxml'.";
+        assert menuBtn != null : "fx:id=\"menuBtn\" was not injected: check your FXML file 'MainView.fxml'.";
+        assert titleLabel != null : "fx:id=\"titleLabel\" was not injected: check your FXML file 'MainView.fxml'.";
+        assert drawer != null : "fx:id=\"drawer\" was not injected: check your FXML file 'MainView.fxml'.";
+
+        titleLabel.setText("Save The World");
+    	transition = new HamburgerBackArrowBasicTransition(menuBtn);
+    	transition.setRate(-1);
+    	mainController = new ScreensController(this);
+
+    	try {
+    		FXMLLoader loader = new FXMLLoader(getClass().getResource(GUI.SIDE_MENU_SCREEN_FXML));
+    	    VBox box = loader.load();
+    	    drawer.setSidePane(box);
+    	    ControlledScreen screenController = ((ControlledScreen) loader.getController());
+            screenController.setScreenParent(mainController);
+    	} catch (IOException ex) {
+    	    Logger.getLogger(MainViewController.class.getName()).log(Level.SEVERE, null, ex);
     	}
 
-    	toggleSideMenu();
+    	
+    	mainController.loadScreen(GUI.CONTACTS_SCREEN, GUI.CONTACTS_SCREEN_FXML);
+    	mainController.loadScreen(GUI.MESSAGE_SCREEN, GUI.MESSAGE_SCREEN_FXML);
+    	mainController.setScreen(GUI.CONTACTS_SCREEN);
+    	
+    	Group root = new Group();
+    	root.getChildren().addAll(mainController);
+    	mainScene.setRoot(root);
+
+    	System.out.println("Initilized MainViewController...");
     }
 
-    private void toggleSideMenu() {
+    public void toggleSideMenu() {
 	    transition.setRate(transition.getRate()*-1);
 		transition.play();
 
@@ -105,3 +96,4 @@ public class MainViewController implements Initializable {
     }
 
 }
+
