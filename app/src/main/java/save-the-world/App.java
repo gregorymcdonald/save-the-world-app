@@ -6,6 +6,7 @@ import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
 
 import javafx.application.Application;
+import java.net.URL;
 
 public class App {
   // Developer phone number(s), for testing. XXX REMOVE LATER
@@ -22,6 +23,6 @@ public class App {
 
     //Launches Applications GUI
     Application.launch(GUI.class, args);
-
   }
+  
 }
