@@ -8,6 +8,11 @@
   <name>save-the-world</name>
   <url>http://maven.apache.org</url>
 
+  <properties>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
+
   <build>
     <plugins>
       <plugin>
@@ -66,6 +71,12 @@
       <groupId>com.firebase</groupId>
       <artifactId>firebase-client</artifactId>
       <version>1.0.1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.jfoenix</groupId>
+      <artifactId>jfoenix</artifactId>
+      <version>1.0.0</version>
     </dependency>
 
   </dependencies>

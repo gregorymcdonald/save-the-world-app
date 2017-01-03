@@ -1,22 +1,11 @@
 package com.savetheworld;
 
-// /**
-//  * Hello world!
-//  *
-//  */
-// public class App 
-// {
-//     public static void main( String[] args )
-//     {
-//         System.out.println( "Hello World!" );
-//     }
-// }
 
 import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
 
-import java.util.ArrayList;
+import javafx.application.Application;
 
 public class App {
   // Developer phone number(s), for testing. XXX REMOVE LATER
@@ -28,7 +17,11 @@ public class App {
 
     //Messenger messenger = Messenger.getInstance();
     //messenger.sendSMS(GREG_PHONE_NUMBER, "Testing 1, 2, 3.");
-    ArrayList <Contact> contacts = Parser.parseFile();
-    System.out.println(contacts.get(0).getFirstName());
+    //ArrayList <Contact> contacts = Parser.parseFile();
+    // System.out.println(contacts.get(0).getFirstName());
+
+    //Launches Applications GUI
+    Application.launch(GUI.class, args);
+
   }
 }

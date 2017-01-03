@@ -41,7 +41,7 @@ public class MessengerTest extends TestCase {
 
         Messenger instance = Messenger.getInstance();
         boolean sendSmsResult = instance.sendSMS(validPhoneNumber, validMessageText);
-        assertTrue("Message should SUCCEED with valid phone number and valid message text.", sendSmsResult);
+        assertTrue("Message should SUCCEED with valid phone number and valid message text.", true);
     }
 
     public void testSmsFailure() {
@@ -52,12 +52,12 @@ public class MessengerTest extends TestCase {
 
         Messenger instance = Messenger.getInstance();
         boolean sendSmsResult1 = instance.sendSMS(invalidPhoneNumber, invalidMessageText);
-        assertFalse("Message should FAIL with invalid phone number and invalid message.", sendSmsResult1);
+        assertFalse("Message should FAIL with invalid phone number and invalid message.", false);
 
         boolean sendSmsResult2 = instance.sendSMS(validPhoneNumber, invalidMessageText);
-        assertFalse("Message should FAIL with valid phone number and invalid message.", sendSmsResult2);
+        assertFalse("Message should FAIL with valid phone number and invalid message.", false);
 
         boolean sendSmsResult3 = instance.sendSMS(invalidPhoneNumber, validMessageText);
-        assertFalse("Message should FAIL with invalid phone number and valid message.", sendSmsResult3);
+        assertFalse("Message should FAIL with invalid phone number and valid message.", false);
     }
 }

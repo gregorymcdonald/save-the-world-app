@@ -1,8 +1,11 @@
 package com.savetheworld;
 
 import java.util.Map;
+import javafx.beans.property.SimpleStringProperty;
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import javafx.beans.property.StringProperty;
 
-public class Contact {
+public class Contact extends RecursiveTreeObject<Contact>{
 
     // CSV Column Name Constants
     public static final String NAME_COL = "Name";
@@ -22,21 +25,21 @@ public class Contact {
     public static final String LAST_NAME = "last-name";
 
     // Private variables for PNM's information
-    private String _eid;
-    private String _firstName;
-    private String _lastName;
-    private String _phoneNumber;
-    private String _email;
-    private String _major;
-    private String _hometown;
-    private String _housing;
-    private String _highschool;
-    private String _leadershipPos;
-    private String _classification;
+    private final StringProperty _eid;
+    public final StringProperty firstName;
+    public final StringProperty lastName;
+    public final StringProperty phoneNumber;
+    private final StringProperty email;
+    private final StringProperty _major;
+    private final StringProperty _hometown;
+    private final StringProperty _housing;
+    private final StringProperty _highschool;
+    private final StringProperty _leadershipPos;
+    private final StringProperty _classification;
     
     // Optional Legacy Info
     private boolean _isLegacy;
-    private String _legacyInfo;
+    private final StringProperty _legacyInfo;
     
     // Recruitment Status Info
     public enum Status { 
@@ -49,10 +52,10 @@ public class Contact {
     // Should not use this constructor other than to test
     public Contact() {
         _eid = null;
-        _firstName = null;
-        _lastName = null;
-        _phoneNumber = null;
-        _email = null;
+        firstName = null;
+        lastName = null;
+        phoneNumber = null;
+        email = null;
         _major = null;
         _hometown = null;
         _housing = null;
@@ -61,82 +64,83 @@ public class Contact {
         _isLegacy = false;
         _legacyInfo = null;
         _recruitmentStatus = null;
+        _classification = null;
     }
     
     // Primary constructor; should always be used
     public Contact(Map <String, String> record) {
-        _eid = record.get(EID_COL);
-        _firstName = record.get(FIRST_NAME);
-        _lastName = record.get(LAST_NAME);
-        _phoneNumber = record.get(PHONE_NUMBER_COL);
-        _email = record.get(EMAIL_COL);
-        _major = record.get(MAJOR_COL);
-        _hometown = record.get(HOME_TOWN_COL);
-        _housing = record.get(HOUSING_COL);
-        _highschool = record.get(HIGH_SCHOOL_COL);
-        _leadershipPos = record.get(POSITIONS_COL);
-        _legacyInfo = record.get(LEGACY_COL);
-        _classification = record.get(CLASSIFICATION_COL);
+        this._eid = new SimpleStringProperty(record.get(EID_COL));
+        this.firstName = new SimpleStringProperty(record.get(FIRST_NAME));
+        this.lastName = new SimpleStringProperty(record.get(LAST_NAME));
+        this.phoneNumber = new SimpleStringProperty(record.get(PHONE_NUMBER_COL));
+        this.email = new SimpleStringProperty(record.get(EMAIL_COL));
+        this._major = new SimpleStringProperty(record.get(MAJOR_COL));
+        this._hometown = new SimpleStringProperty(record.get(HOME_TOWN_COL));
+        this._housing = new SimpleStringProperty(record.get(HOUSING_COL));
+        this._highschool = new SimpleStringProperty(record.get(HIGH_SCHOOL_COL));
+        this._leadershipPos = new SimpleStringProperty(record.get(POSITIONS_COL));
+        this._legacyInfo = new SimpleStringProperty(record.get(LEGACY_COL));
+        this._classification = new SimpleStringProperty(record.get(CLASSIFICATION_COL));
     }
     
     // Begin massive list of getters and setters
     // Get/Set EID
     public String getEid() {
-        return _eid;
+        return _eid.get();
     }
     
     public void setEid(String newEid) {
-        _eid = newEid;
+        _eid.set(newEid);
     }
     
     
     // Get/Set First Name
     public String getFirstName() {
-        return _firstName;
+        return firstName.get();
     }
     
     public void setFirstName(String newFirstName) {
-        _firstName = newFirstName;
+        firstName.set(newFirstName);
     }
     
     
     // Get/Set Last Name
     public String getLastName() {
-        return _lastName;
+        return lastName.get();
     }
     
     public void setLastName(String newLastName) {
-        _lastName = newLastName;
+        lastName.set(newLastName);
     }
     
     
     // Get/Set Phone Number
     public String getPhoneNumber() {
-        return _phoneNumber;
+        return phoneNumber.get();
     }
     
     public void setPhoneNumber(String newPhoneNumber) {
-        _phoneNumber = newPhoneNumber;
+        phoneNumber.set(newPhoneNumber);
     }
     
     
     // Get/Set email address
     public String getEmail() {
-        return _email;
+        return email.get();
     }
     
     public void setEmail(String newEmail) {
-        _email = newEmail;
+        email.set(newEmail);
     }
     
     
     // Get/Set Major
     public String getMajor() {
-        return _major;
+        return _major.get();
     }
     
     public void setMajor(String newMajor) {
-        _major = newMajor;
+        _major.set(newMajor);
     }
     
     
@@ -152,41 +156,41 @@ public class Contact {
     
     // Get/Set Housing
     public String getHousing() {
-        return _housing;
+        return _housing.get();
     }
     
     public void setHousing(String newHousing) {
-        _housing = newHousing;
+        _housing.set(newHousing);
     }
     
     
     // Get/Set Hometown
     public String getHometown() {
-        return _hometown;
+        return _hometown.get();
     }
     
     public void setHometown(String newHometown) {
-        _hometown = newHometown;
+        _hometown.set(newHometown);
     }
     
     
     // Get/Set Highschool
     public String getHighschool() {
-        return _highschool;
+        return _highschool.get();
     }
     
     public void setHighschool(String newHighschool) {
-        _highschool = newHighschool;
+        _highschool.set(newHighschool);
     }
     
     
     // Get/Set Leadership Positions
     public String getLeadershipPositions() {
-        return _leadershipPos;
+        return _leadershipPos.get();
     }
     
     public void setLeadershipPositions(String newLeadershipPos) {
-        _leadershipPos = newLeadershipPos;
+        _leadershipPos.set(newLeadershipPos);
     }
     
     
@@ -202,10 +206,10 @@ public class Contact {
     
     // Get/Set Legacy Information
     public String getLegacyInformation() {
-        return _legacyInfo;
+        return _legacyInfo.get();
     }
     
     public void setLegacyInformation(String newLegacyInfo) {
-        _legacyInfo = newLegacyInfo;
+        _legacyInfo.set(newLegacyInfo);
     }
 }
