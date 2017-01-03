@@ -46,6 +46,37 @@ public class ConversationRecord extends Record {
         return new ArrayList<MessageRecord>(messages);
     }
 
+    @Override
+    public boolean equals(Object o){
+        if(o == null || !(o instanceof ConversationRecord)){
+            return false;
+        }
+
+        ConversationRecord argument = (ConversationRecord) o;
+        if(!this.participant1.equals(argument.participant1) || !this.participant2.equals(argument.participant2)){
+            return false;
+        }
+
+        List<MessageRecord> argumentMessages = argument.getMessages();
+        if(this.messages.size() != argumentMessages.size()){
+            return false;
+        }
+
+        for(MessageRecord argumentMessage : argumentMessages){
+            boolean hasEquivalentMessage = false;
+            for(MessageRecord message : this.messages){
+                if(message.equals(argumentMessage)){
+                    hasEquivalentMessage = true;
+                    break;
+                }          
+            }
+            if(!hasEquivalentMessage){
+                return false;
+            }
+        }
+        return true;
+    }
+
     /**
      * Returns a string representation of this ConversationRecord in JSON format.
      * @return A String representation of this ConversationRecord in JSON format.
