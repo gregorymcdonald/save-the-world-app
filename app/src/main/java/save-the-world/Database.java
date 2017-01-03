@@ -30,6 +30,14 @@ public class Database {
     }
 
     /**
+     * Clear the local copy of the database, all changes will be discarded.
+     */
+    public void clear(){
+        System.out.println("Clearing local database...");
+        conversations = new ArrayList<ConversationRecord>();
+    }
+
+    /**
      * Update the local copy of the database from the remote. Overrides all local changes that have not been pushed.
      */
     public void pull(){

@@ -48,12 +48,12 @@ public class MessageRecord extends Record implements Comparable<MessageRecord> {
     }
 
     @Override
-    public boolean equals(Object arg){
-        if(arg == null || !(arg instanceof MessageRecord)){
+    public boolean equals(Object o){
+        if(o == null || !(o instanceof MessageRecord)){
             return false;
         }
 
-        MessageRecord argument = (MessageRecord) arg;
+        MessageRecord argument = (MessageRecord) o;
         return this.to.equals(argument.to) && this.from.equals(argument.from) 
             && this.body.equals(argument.body) && this.timestamp.equals(argument.timestamp);
     }    
