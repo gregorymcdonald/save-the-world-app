@@ -65,7 +65,8 @@ public class FirebaseUtilities {
                     break;
             }
         } catch (Exception e) {
-            System.err.println("Error occurred while get conversation over HTTPS.");
+            System.err.println("Error occurred while reading data from Firebase.");
+            e.printStackTrace();
         }
         return null;
     }
@@ -114,7 +115,8 @@ public class FirebaseUtilities {
                     break;
             }
         } catch (Exception e) {
-            System.err.println("Error occurred while get conversation over HTTPS.");
+            System.err.println("Error occurred while writing data to Firebase.");
+            e.printStackTrace();
         } finally {
 
         }
