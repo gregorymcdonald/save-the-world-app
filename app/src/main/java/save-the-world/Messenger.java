@@ -4,6 +4,8 @@ import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
 
+import java.util.Date;
+
 public class Messenger {
     // Find your Account Sid and Token at twilio.com/user/account
     public static final String ACCOUNT_SID = "AC7bf672b3288a8dbd2535daa1e128ec5f";
@@ -25,27 +27,26 @@ public class Messenger {
         return singletonInstance;
     }
 
-    public boolean sendSMS(String phoneNumber, String messageText) {
+    public MessageRecord sendSMS(String toPhoneNumber, String messageBody) {
         // Preliminary validity-check of arguments
-        boolean validArguments = isValidPhoneNumber(phoneNumber) && isValidMessage(messageText);
+        boolean validArguments = isValidPhoneNumber(toPhoneNumber) && isValidMessageBody(messageBody);
 
         // If send messages flag is set and arguments are valid
         if(SEND_MESSAGES && validArguments){
             try {
                 // Send the message
-                Message message = Message.creator(new PhoneNumber(phoneNumber),
+                Message message = Message.creator(new PhoneNumber(toPhoneNumber),
                     new PhoneNumber(TWILIO_PHONE_NUMBER), 
-                    messageText).create();
+                    messageBody).create();
                 System.out.println(message.getSid());
-
-                return true;
             } catch (Exception e) {
                 // Something went wrong
-                return false;
+                System.err.println("Error encountered sending message to " + toPhoneNumber + " with body \"" + messageBody + "\".");
+                return null;
             }
         }
 
-        return validArguments;
+        return validArguments ? new MessageRecord(null, toPhoneNumber, TWILIO_PHONE_NUMBER, messageBody, new Date()) : null;
     }
 
     // Helper Method(s)
@@ -53,14 +54,14 @@ public class Messenger {
     public static boolean isValidPhoneNumber(String phoneNumber){
         if(phoneNumber == null) return false;
 
-        boolean sufficientLength = phoneNumber.length() > 8;
+        boolean sufficientLength = phoneNumber.length() > 9;
         return sufficientLength;
     }
 
-    public static boolean isValidMessage(String message){
-        if(message == null) return false;
+    public static boolean isValidMessageBody(String messageBody){
+        if(messageBody == null) return false;
 
-        boolean sufficientLength = message.length() > 0;
+        boolean sufficientLength = messageBody.length() > 0;
         return sufficientLength;
     }
 }

@@ -18,18 +18,18 @@ Ensure you are in the servlet directory, then
 Enter the following command(s) in order:
 1. 'mvn package'  java
 2. 'heroku war:deploy target/save-the-world-servlet-1.0-SNAPSHOT.war --app <app_name>'  
-	a. <app_name> is given when 'heroku create' is run, or can be specified  
-	b. Suggested <app_name> is 'save-the-world-servlet'
-	c. <app_name> will vary based on developer  
+	* <app_name> is given when 'heroku create' is run, or can be specified  
+	* Suggested <app_name> is 'save-the-world-servlet'
+	* <app_name> will vary based on developer  
 
 ## Servlet Run/Scale Instructions
 Enter the following command(s) in order (you do not need to be in the servlet directory):
 1. 'heroku ps:scale web=<number_of_dynos> --app <app_name>'  
-	a. <app_name> is given when 'heroku create' is run, or can be specified  
-	b. Suggested <app_name> is 'save-the-world-servlet'
-	c. <app_name> will vary based on developer  
-	d. <number_of_dynos> is the number of instances you want to run  
-		i. Inputting a 0 will turn off the servlet  
+	* <app_name> is given when 'heroku create' is run, or can be specified  
+	* Suggested <app_name> is 'save-the-world-servlet'
+	* <app_name> will vary based on developer  
+	* <number_of_dynos> is the number of instances you want to run  
+		* Inputting a 0 will turn off the servlet  
 
 ## How to Clean
 Ensure you are in the app or servlet directory, then  
