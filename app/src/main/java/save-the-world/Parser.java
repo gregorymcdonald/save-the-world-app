@@ -6,6 +6,8 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -21,7 +23,12 @@ public class Parser {
 	//Map Key Constants for First and Last Name entries 
     private static final String FIRST_NAME = "first-name";
     private static final String LAST_NAME = "last-name";
+    
+    //CSV column key name constants
     private static final String NAME_COL = "Name";
+    private static final String SUBMITTED_ON_COL = "Submitted On";
+
+    private static final String CUT_OFF_DATE = "10/31/2016 00:00";
 
 	public static ArrayList <Contact> parseFile() {
 
@@ -30,16 +37,25 @@ public class Parser {
 		try {
 			Reader in = new FileReader(LOCAL_FILE);
 			Iterable<CSVRecord> records = CSVFormat.EXCEL.withHeader().parse(in);
+			SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy h:m");
+
 			for (CSVRecord record : records) {
 
 				Map <String, String> entry = record.toMap();
-				splitName(record.get(NAME_COL), entry);
-
-				Contact c = new Contact(entry);
-				contacts.add(c);
+				String timeStamp = entry.get(SUBMITTED_ON_COL);
+				try {
+					Boolean validTimeStamp = sdf.parse(timeStamp).after(sdf.parse(CUT_OFF_DATE));
+					if(validTimeStamp) {
+						splitName(record.get(NAME_COL), entry);
+						Contact c = new Contact(entry);
+						contacts.add(c);
+					}
+				} catch (ParseException e) {
+					System.out.println("INVALID CSV ENTRY...");
+				}
 			}
 		} catch (IOException e) {
-			System.out.println("CSV FILE NOT FOUND");
+			System.out.println("CSV FILE NOT FOUND...");
 		}
 
 		return contacts;
