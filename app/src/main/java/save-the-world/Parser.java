@@ -14,12 +14,14 @@ import org.apache.commons.csv.CSVRecord;
 
 public class Parser {
 
-	public static final String LOCAL_FILE = "/Users/adamestrin/Downloads/IFC-List.csv";
 
-	//Mao Constants for First and Last Name entries 
-    public static final String FIRST_NAME = "first-name";
-    public static final String LAST_NAME = "last-name";
-    public static final String NAME_COL = "Name";
+	private static final String LOCAL_FILE = "IFC_LIST.csv";
+	private static final String HOME_DIRECTORY = System.getProperty("user.home"); 
+
+	//Map Key Constants for First and Last Name entries 
+    private static final String FIRST_NAME = "first-name";
+    private static final String LAST_NAME = "last-name";
+    private static final String NAME_COL = "Name";
 
 	public static ArrayList <Contact> parseFile() {
 

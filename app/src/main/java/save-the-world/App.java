@@ -4,6 +4,7 @@ import org.json.simple.JSONObject;
 import java.util.ArrayList;
 import java.util.Date;
 import javafx.application.Application;
+import java.io.IOException;
 
 public class App {
     // The phone number from which messages are sent.
@@ -33,6 +34,16 @@ public class App {
         // Test parsing
         // ArrayList <Contact> contacts = Parser.parseFile();
         // System.out.println(contacts.get(0).getFirstName());
+      
+        //Retreive the most recent IFC CSV from Google Drive
+        try {
+          GoogleDriveManager.downloadMostRecentCSV();
+        } catch (IOException e) {
+          System.out.println("Failure to download IFC CSV...");
+          System.out.println(e);
+        }
+
+        //launch Application GUI
         Application.launch(GUI.class, args);
     }
 
