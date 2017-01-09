@@ -66,4 +66,30 @@ public class JSONUtilities {
 
         return new MessageRecord(firebaseId, to, from, body, new Date(timestamp));
     }
+    
+    /**
+     * Converts a JSONObject to a Contact.
+     * @param firebaseID The unique ID assigned to the Firebase JSON object for the given Contact
+     * @param json A JSONObject representing the Contact
+     * @return A Contact object containing the data in the input JSON
+     */
+    public static Contact convertJSONToContact(String firebaseId, JSONObject json){
+        Map <String, Object> record = new Map<>();
+        record.put("eid", (StringProperty) json.get("eid"));
+        record.put("firstName", (StringProperty) json.get("firstName"));
+        record.put("lastName", (StringProperty) json.get("lastName"));
+        record.put("phoneNumber", (StringProperty) json.get("phoneNumber"));
+        record.put("email", (StringProperty) json.get("email"));
+        record.put("major", (StringProperty) json.get("major"));
+        record.put("hometown", (StringProperty) json.get("hometown"));
+        record.put("housing", (StringProperty) json.get("housing"));
+        record.put("highschool", (StringProperty) json.get("highschool"));
+        record.put("leadershipPos", (StringProperty) json.get("leadershipPos"));
+        record.put("classification", (StringProperty) json.get("classification"));
+        record.put("legacyInfo", (StringProperty) json.get("legacyInfo"));
+        record.put("isLegacy", (Boolean) json.get("isLegacy"));
+        record.put("recruitmentStatus", (Status) json.get("recruitmentStatus"));
+        
+        return new Contact(record);
+    }
 }

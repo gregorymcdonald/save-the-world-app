@@ -67,6 +67,24 @@ public class Contact extends RecursiveTreeObject<Contact>{
         _classification = null;
     }
     
+    // Constructor used for recreation from Firebase
+    public Contact(Map <String, Object> record) {
+        _eid = new SimpleStringProperty(record.get("eid"));
+        firstName = new SimpleStringProperty(record.get("firstName"));
+        lastName = new SimpleStringProperty(record.get("lastName"));
+        phoneNumber = new SimpleStringProperty(record.get("phoneNumber"));
+        email = new SimpleStringProperty(record.get("email"));
+        _major = new SimpleStringProperty(record.get("major"));
+        _hometown = new SimpleStringProperty(record.get("hometown"));
+        _housing = new SimpleStringProperty(record.get("housing"));
+        _highschool = new SimpleStringProperty(record.get("highschool"));
+        _leadershipPos = new SimpleStringProperty(record.get("leadershipPos"));
+        _isLegacy = new SimpleStringProperty(record.get("isLegacy"));
+        _legacyInfo = new SimpleStringProperty(record.get("legacyInfo"));
+        _classification = new SimpleStringProperty(record.get("classification"));
+        _recruitmentStatus = new SimpleStringProperty(record.get("recruitmentStatus"));
+    }
+    
     // Primary constructor; should always be used
     public Contact(Map <String, String> record) {
         this._eid = new SimpleStringProperty(record.get(EID_COL));
