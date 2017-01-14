@@ -1,11 +1,8 @@
 package com.savetheworld;
 
 import java.util.Map;
-import javafx.beans.property.SimpleStringProperty;
-import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
-import javafx.beans.property.StringProperty;
 
-public class Contact extends RecursiveTreeObject<Contact>{
+public class Contact {
 
     // CSV Column Name Constants
     public static final String NAME_COL = "Name";
@@ -25,26 +22,26 @@ public class Contact extends RecursiveTreeObject<Contact>{
     public static final String LAST_NAME = "last-name";
 
     // Private variables for PNM's information
-    private final StringProperty _eid;
-    public final StringProperty firstName;
-    public final StringProperty lastName;
-    public final StringProperty phoneNumber;
-    private final StringProperty email;
-    private final StringProperty _major;
-    private final StringProperty _hometown;
-    private final StringProperty _housing;
-    private final StringProperty _highschool;
-    private final StringProperty _leadershipPos;
-    private final StringProperty _classification;
+    private String _eid;
+    private String _firstName;
+    private String _lastName;
+    private String _phoneNumber;
+    private String _email;
+    private String _major;
+    private String _hometown;
+    private String _housing;
+    private String _highschool;
+    private String _leadershipPos;
+    private String _classification;
     
     // Optional Legacy Info
     private boolean _isLegacy;
-    private final StringProperty _legacyInfo;
+    private String _legacyInfo;
     
     // Recruitment Status Info
     public enum Status { 
         // TODO: Clean-up names a bit?
-        NONE, CONTACTED, BEEN_TO_EVENT, BID_READY,
+        NONE, NEW, CONTACTED, BEEN_TO_EVENT, BID_READY,
         BID_OUT, ACCEPTED, DECLINED, DEFFERED
     }
     private Status _recruitmentStatus;
@@ -52,10 +49,10 @@ public class Contact extends RecursiveTreeObject<Contact>{
     // Should not use this constructor other than to test
     public Contact() {
         _eid = null;
-        firstName = null;
-        lastName = null;
-        phoneNumber = null;
-        email = null;
+        _firstName = null;
+        _lastName = null;
+        _phoneNumber = null;
+        _email = null;
         _major = null;
         _hometown = null;
         _housing = null;
@@ -64,83 +61,82 @@ public class Contact extends RecursiveTreeObject<Contact>{
         _isLegacy = false;
         _legacyInfo = null;
         _recruitmentStatus = null;
-        _classification = null;
     }
     
     // Primary constructor; should always be used
     public Contact(Map <String, String> record) {
-        this._eid = new SimpleStringProperty(record.get(EID_COL));
-        this.firstName = new SimpleStringProperty(record.get(FIRST_NAME));
-        this.lastName = new SimpleStringProperty(record.get(LAST_NAME));
-        this.phoneNumber = new SimpleStringProperty(record.get(PHONE_NUMBER_COL));
-        this.email = new SimpleStringProperty(record.get(EMAIL_COL));
-        this._major = new SimpleStringProperty(record.get(MAJOR_COL));
-        this._hometown = new SimpleStringProperty(record.get(HOME_TOWN_COL));
-        this._housing = new SimpleStringProperty(record.get(HOUSING_COL));
-        this._highschool = new SimpleStringProperty(record.get(HIGH_SCHOOL_COL));
-        this._leadershipPos = new SimpleStringProperty(record.get(POSITIONS_COL));
-        this._legacyInfo = new SimpleStringProperty(record.get(LEGACY_COL));
-        this._classification = new SimpleStringProperty(record.get(CLASSIFICATION_COL));
+        _eid = record.get(EID_COL);
+        _firstName = record.get(FIRST_NAME);
+        _lastName = record.get(LAST_NAME);
+        _phoneNumber = record.get(PHONE_NUMBER_COL);
+        _email = record.get(EMAIL_COL);
+        _major = record.get(MAJOR_COL);
+        _hometown = record.get(HOME_TOWN_COL);
+        _housing = record.get(HOUSING_COL);
+        _highschool = record.get(HIGH_SCHOOL_COL);
+        _leadershipPos = record.get(POSITIONS_COL);
+        _legacyInfo = record.get(LEGACY_COL);
+        _classification = record.get(CLASSIFICATION_COL);
     }
     
     // Begin massive list of getters and setters
     // Get/Set EID
     public String getEid() {
-        return _eid.get();
+        return _eid;
     }
     
     public void setEid(String newEid) {
-        _eid.set(newEid);
+        _eid = newEid;
     }
     
     
     // Get/Set First Name
     public String getFirstName() {
-        return firstName.get();
+        return _firstName;
     }
     
     public void setFirstName(String newFirstName) {
-        firstName.set(newFirstName);
+        _firstName = newFirstName;
     }
     
     
     // Get/Set Last Name
     public String getLastName() {
-        return lastName.get();
+        return _lastName;
     }
     
     public void setLastName(String newLastName) {
-        lastName.set(newLastName);
+        _lastName = newLastName;
     }
     
     
     // Get/Set Phone Number
     public String getPhoneNumber() {
-        return phoneNumber.get();
+        return _phoneNumber;
     }
     
     public void setPhoneNumber(String newPhoneNumber) {
-        phoneNumber.set(newPhoneNumber);
+        _phoneNumber = newPhoneNumber;
     }
     
     
     // Get/Set email address
     public String getEmail() {
-        return email.get();
+        return _email;
     }
     
     public void setEmail(String newEmail) {
-        email.set(newEmail);
+        _email = newEmail;
     }
     
     
     // Get/Set Major
     public String getMajor() {
-        return _major.get();
+        return _major;
     }
     
     public void setMajor(String newMajor) {
-        _major.set(newMajor);
+        _major = newMajor;
     }
     
     
@@ -156,41 +152,41 @@ public class Contact extends RecursiveTreeObject<Contact>{
     
     // Get/Set Housing
     public String getHousing() {
-        return _housing.get();
+        return _housing;
     }
     
     public void setHousing(String newHousing) {
-        _housing.set(newHousing);
+        _housing = newHousing;
     }
     
     
     // Get/Set Hometown
     public String getHometown() {
-        return _hometown.get();
+        return _hometown;
     }
     
     public void setHometown(String newHometown) {
-        _hometown.set(newHometown);
+        _hometown = newHometown;
     }
     
     
     // Get/Set Highschool
     public String getHighschool() {
-        return _highschool.get();
+        return _highschool;
     }
     
     public void setHighschool(String newHighschool) {
-        _highschool.set(newHighschool);
+        _highschool = newHighschool;
     }
     
     
     // Get/Set Leadership Positions
     public String getLeadershipPositions() {
-        return _leadershipPos.get();
+        return _leadershipPos;
     }
     
     public void setLeadershipPositions(String newLeadershipPos) {
-        _leadershipPos.set(newLeadershipPos);
+        _leadershipPos = newLeadershipPos;
     }
     
     
@@ -206,10 +202,10 @@ public class Contact extends RecursiveTreeObject<Contact>{
     
     // Get/Set Legacy Information
     public String getLegacyInformation() {
-        return _legacyInfo.get();
+        return _legacyInfo;
     }
     
     public void setLegacyInformation(String newLegacyInfo) {
-        _legacyInfo.set(newLegacyInfo);
+        _legacyInfo = newLegacyInfo;
     }
 }

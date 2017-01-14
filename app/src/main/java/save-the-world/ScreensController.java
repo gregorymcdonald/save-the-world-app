@@ -18,11 +18,9 @@ public class ScreensController extends StackPane {
     
     //Holds the screens to be displayed
     private HashMap<String, Node> screens = new HashMap<>();
-    private MainViewController mainView;
 
     public ScreensController(MainViewController main) {
         super();
-        this.mainView = main;
     }
 
     //Add the screen to the collection
@@ -74,7 +72,6 @@ public class ScreensController extends StackPane {
                     }
                 }, new KeyValue(opacity, 0.0)));
                 fade.play();
-                mainView.toggleSideMenu();
             } else {
                 setOpacity(0.0);
                 getChildren().add(screens.get(name));       //no one else been displayed, then just show

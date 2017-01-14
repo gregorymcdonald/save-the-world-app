@@ -33,6 +33,8 @@ public class Parser {
 	public static ArrayList <Contact> parseFile() {
 
 		ArrayList <Contact> contacts = new ArrayList<Contact>();
+		int pnmCount = 0;
+		System.out.println("Parsing IFC List...");
 
 		try {
 			Reader in = new FileReader(LOCAL_FILE);
@@ -46,8 +48,10 @@ public class Parser {
 				try {
 					Boolean validTimeStamp = sdf.parse(timeStamp).after(sdf.parse(CUT_OFF_DATE));
 					if(validTimeStamp) {
+						pnmCount++;
 						splitName(record.get(NAME_COL), entry);
 						Contact c = new Contact(entry);
+						c.setRecruitmentStatus(Contact.Status.NEW);
 						contacts.add(c);
 					}
 				} catch (ParseException e) {
@@ -57,6 +61,8 @@ public class Parser {
 		} catch (IOException e) {
 			System.out.println("CSV FILE NOT FOUND...");
 		}
+
+		System.out.printf("Completed Parsing IFC List: %d records found...\n", pnmCount);
 
 		return contacts;
 	}
