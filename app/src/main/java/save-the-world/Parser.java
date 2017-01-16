@@ -26,6 +26,7 @@ public class Parser {
     //CSV column key name constants
     private static final String NAME_COL = "Name";
     private static final String SUBMITTED_ON_COL = "Submitted On";
+    private static final String PHONE_NUMBER_COL = "Cellphone Number";
 
     private static final String CUT_OFF_DATE = "10/31/2016 00:00";
 
@@ -49,6 +50,8 @@ public class Parser {
 					if(validTimeStamp) {
 						pnmCount++;
 						splitName(record.get(NAME_COL), entry);
+						cleanPhoneNumber(record.get(PHONE_NUMBER_COL), entry);
+
 						Contact c = new Contact(entry);
 						c.setRecruitmentStatus(Contact.Status.NEW);
 						contacts.add(c);
@@ -83,6 +86,11 @@ public class Parser {
 
 	   entry.put(FIRST_NAME, firstName);
 	   entry.put(LAST_NAME, lastName);
+	}
+
+	private static void cleanPhoneNumber(String phoneNumber, Map<String, String> entry) {
+		String cleanNumber = phoneNumber.replaceAll("[^0-9]","");
+		entry.put(PHONE_NUMBER_COL, cleanNumber);
 	}
 
 }

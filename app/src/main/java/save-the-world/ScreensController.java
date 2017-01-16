@@ -18,6 +18,7 @@ public class ScreensController extends StackPane {
     
     //Holds the screens to be displayed
     private HashMap<String, Node> screens = new HashMap<>();
+    private HashMap<String, ControlledScreen> controllers = new HashMap<>();
 
     public ScreensController(MainViewController main) {
         super();
@@ -26,6 +27,10 @@ public class ScreensController extends StackPane {
     //Add the screen to the collection
     public void addScreen(String name, Node screen) {
         screens.put(name, screen);
+    }
+
+    public void addController(String name, ControlledScreen controller) {
+        controllers.put(name, controller);
     }
 
     //Returns the Node with the appropriate name
@@ -41,6 +46,7 @@ public class ScreensController extends StackPane {
             Parent loadScreen = (Parent) myLoader.load();
             ControlledScreen myScreenControler = ((ControlledScreen) myLoader.getController());
             myScreenControler.setScreenParent(this);
+            addController(name, myScreenControler);
             addScreen(name, loadScreen);
             return true;
         } catch (Exception e) {
@@ -54,7 +60,7 @@ public class ScreensController extends StackPane {
     //one screen the new screen is been added second, and then the current screen is removed.
     // If there isn't any screen being displayed, the new screen is just added to the root.
     public boolean setScreen(final String name) {       
-        if (screens.get(name) != null) {   //screen loaded
+        if (screens.get(name) != null && controllers.get(name) != null) {   //screen loaded
             final DoubleProperty opacity = opacityProperty();
 
             if (!getChildren().isEmpty()) {    //if there is more than one screen
@@ -80,6 +86,9 @@ public class ScreensController extends StackPane {
                         new KeyFrame(new Duration(100), new KeyValue(opacity, 1.0)));
                 fadeIn.play();
             }
+
+            controllers.get(name).viewDidLoad();
+
             return true;
         } else {
             System.out.println("screen hasn't been loaded!!! \n");

@@ -19,6 +19,7 @@ public class MessageViewController implements ControlledScreen {
 
     private ScreensController controller;
     private ConversationRecord selectedRecord = null;
+    private static Database db = Database.getInstance();
 
     @FXML
     private ResourceBundle resources;
@@ -68,6 +69,10 @@ public class MessageViewController implements ControlledScreen {
         });
     }
 
+    public void viewDidLoad() {
+        db.pull();
+    }
+
     public void handleListCellClicked(String cellValue) {
         this.selectedRecord = Database.getInstance().getConversation(cellValue, "+15162102347");
         loadConversation();
@@ -77,6 +82,8 @@ public class MessageViewController implements ControlledScreen {
 
         if(this.selectedRecord == null)
             return;
+
+        db.pull();
 
         conversationList.getItems().clear();
         List<MessageRecord> messages = selectedRecord.getMessages();
@@ -91,33 +98,30 @@ public class MessageViewController implements ControlledScreen {
 
     public void sendMessage() {
 
-        //ensure there is a message in the text field
-        if(messageField.getText() != null && messageField.getText().trim().isEmpty()){
+        //grab the message body from teh text field
+        String messageBody = messageField.getText();
+        System.out.println(messageBody);
 
-            //grab the message body from teh text field
-            String messageBody = messageField.getText();
+        //Send actual message to selected 
+        Messenger messenger = Messenger.getInstance();
+        MessageRecord newMessage = messenger.sendSMS(selectedRecord.participant2, messageBody);
 
-            //Send actual message to selected 
-            Messenger messenger = Messenger.getInstance();
-            MessageRecord newMessage = messenger.sendSMS(selectedRecord.participant2, messageBody);
-
-            //Uppon successfully sending message save message to the ConversationRecord, save the local Database and then push 
-            if (newMessage != null) {
-                Database db = Database.getInstance();
-                selectedRecord.addMessage(newMessage);
-                db.saveConversation(selectedRecord);
-                db.push();
-                displayMessage(newMessage); 
-            } else{
-                //notify the user there was some sore of error sending message
-            }
+        //Uppon successfully sending message save message to the ConversationRecord, save the local Database and then push 
+        if (newMessage != null) {
+            Database db = Database.getInstance();
+            selectedRecord.addMessage(newMessage);
+            db.saveConversation(selectedRecord);
+            displayMessage(newMessage); 
+        } else{
+            //notify the user there was some sore of error sending message
         }
-
+       
         messageField.clear();
     }
 
     public void loadConversationList() {
-        List<ConversationRecord> conversations = Database.getInstance().getAllConversations();
+
+        List<ConversationRecord> conversations = db.getAllConversations();
 
         for(ConversationRecord c : conversations) {
             listView.getItems().add(c.participant2);

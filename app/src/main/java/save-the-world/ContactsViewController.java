@@ -78,11 +78,8 @@ public class ContactsViewController implements ControlledScreen {
             @Override
             public void handle(ActionEvent event){
 
-                if(textArea.getText() != null && textArea.getText().trim().isEmpty()){
-                    String textAreaContent = textArea.getText();
-                    sendMassMessage(textAreaContent);
-                }
-
+                String textAreaContent = textArea.getText();
+                sendMassMessage(textAreaContent);
                 dialog.close();
             }
         });
@@ -102,8 +99,7 @@ public class ContactsViewController implements ControlledScreen {
 
     @FXML
     void clearSelectedHandler(MouseEvent event) {
-        selectedCells.clear();
-        tableView.getSelectionModel().clearSelection();
+       clearSelectedCells();
     }
 
     @FXML
@@ -116,34 +112,24 @@ public class ContactsViewController implements ControlledScreen {
         assert lastNameCol != null : "fx:id=\"lastNameCol\" was not injected: check your FXML file 'ContactsView.fxml'.";
         assert stackPane != null : "fx:id=\"stackPane\" was not injected: check your FXML file 'ContactsView.fxml'.";
 
-        firstNameCol.setMinWidth(100);
+        //firstNameCol.setMinWidth(100);
         firstNameCol.setCellValueFactory(
                 new PropertyValueFactory<ContactTableViewModel, String>("firstName"));
  
-        lastNameCol.setMinWidth(100);
+        //lastNameCol.setMinWidth(100);
         lastNameCol.setCellValueFactory(
                 new PropertyValueFactory<ContactTableViewModel, String>("lastName"));
  
     
-        // TableColumn<ContactTableViewModel, Number> indexColumn = new TableColumn<ContactTableViewModel, Number>("#");
-        // indexColumn.setSortable(false);
-        // indexColumn.setCellValueFactory(column-> new ReadOnlyObjectWrapper<Number>(tableView.getItems().indexOf(column.getValue())));
+        TableColumn<ContactTableViewModel, Number> indexColumn = new TableColumn<ContactTableViewModel, Number>("#");
+        indexColumn.setSortable(false);
+        indexColumn.setCellValueFactory(column-> new ReadOnlyObjectWrapper<Number>(tableView.getItems().indexOf(column.getValue())));
  
-        //Ideally will replace witha a call to the Database to retreive all contacts that will have their status set 
-        ArrayList<Contact> contacts = Parser.parseFile();
         data = FXCollections.observableArrayList();
-
-        for(Contact c: contacts) {
-            ContactTableViewModel model = new ContactTableViewModel();
-            model.firstName.set(c.getFirstName());
-            model.lastName.set(c.getLastName());
-            model.phoneNumber.set(c.getPhoneNumber());
-            data.add(model);
-        } 
-
-        System.out.println(data.size());
-        tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         tableView.setItems(data);
+        tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        tableView.setEditable(false);
+        tableView.getColumns().add(indexColumn);
 
         tableView.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
@@ -161,12 +147,17 @@ public class ContactsViewController implements ControlledScreen {
 
     }
 
+    /* Called when the view appears on the screen */
+    public void viewDidLoad() {
+        populateContactsTable();
+    }
+
     public void setScreenParent(ScreensController screenParent) {
         controller = screenParent;
     }
 
     public void sendMassMessage(String message) {
-        
+               
         ObservableList<ContactTableViewModel> selectedContacts = tableView.getSelectionModel().getSelectedItems();
         Database db = Database.getInstance();
         Messenger messenger = Messenger.getInstance();
@@ -174,6 +165,7 @@ public class ContactsViewController implements ControlledScreen {
         //loop over all the selected contacts and send each one a message
         for(ContactTableViewModel model : selectedContacts) {
 
+            String constructedMessage = MessageBuilder.buildMessage(message, model);
             String contactsPhoneNumber = model.phoneNumber.get();
             String TWILIO_PHONE_NUMBER = "+15162102347";
 
@@ -185,18 +177,16 @@ public class ContactsViewController implements ControlledScreen {
                 record = new ConversationRecord(TWILIO_PHONE_NUMBER, contactsPhoneNumber, null);
 
             //send the message to the contact
-            MessageRecord sentMessage = messenger.sendSMS(contactsPhoneNumber, message);
+            MessageRecord sentMessage = messenger.sendSMS(contactsPhoneNumber, constructedMessage);
 
             //if the message was successfully sent save the conversation to the db and push
             if(sentMessage != null) {
                 record.addMessage(sentMessage);
                 db.saveConversation(record);
-                db.push();
             }else{
                 //notify user about failed message attempt 
             }
 
-            System.out.println(model.phoneNumber.get());
         }
 
         //clear the selected cells
@@ -206,8 +196,45 @@ public class ContactsViewController implements ControlledScreen {
     public void clearSelectedCells() {
         selectedCells.clear();
         tableView.getSelectionModel().clearSelection();
-    }  
+    }
+
+    private void populateContactsTable() {
+        ArrayList<Contact> contacts = Parser.parseFile();
+        for(Contact c: contacts) {
+            ContactTableViewModel model = new ContactTableViewModel();
+            model.firstName.set(c.getFirstName());
+            model.lastName.set(c.getLastName());
+            model.phoneNumber.set(c.getPhoneNumber());
+            data.add(model);
+        }
+    }
+
+
+    //TEST FOR TABLE VIEW
+    public void populateTestTable() {
+        ContactTableViewModel greg = new ContactTableViewModel();
+        greg.firstName.set("Greg");
+        greg.lastName.set("McDondald");
+        greg.phoneNumber.set("14692379287");
+
+        ContactTableViewModel adam = new ContactTableViewModel();
+        adam.firstName.set("Adam");
+        adam.lastName.set("Estrin");
+        adam.phoneNumber.set("5163533154");
+
+        ContactTableViewModel kieran = new ContactTableViewModel();
+        kieran.firstName.set("Kieran");
+        kieran.lastName.set("Vanderslice");
+        kieran.phoneNumber.set("17136208645");
+
+        data.add(greg);
+        data.add(adam);
+        data.add(kieran);
+    }
+
+
 } 
+
 
 
 

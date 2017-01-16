@@ -17,7 +17,7 @@ public class Messenger {
     // Singleton instance
     private static Messenger singletonInstance = new Messenger();
 
-    private static final boolean SEND_MESSAGES = false;
+    private static final boolean SEND_MESSAGES = true;
 
     private Messenger() {
         Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
