@@ -5,6 +5,8 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import java.util.Date;
+import java.util.Map;
+import java.util.HashMap;
 
 /**
  * Unit test (s) for the Database class.
@@ -80,6 +82,38 @@ public class DatabaseTest extends TestCase {
         db.clear();
         db.pull();
         assertTrue("After push should commit changes to the remote.", db.getAllConversations().size() > numConversationsBeforePush);
+    }
+
+    /**
+     * Test getAllContacts
+     */
+    public void test_getAllContacts() {
+        Database db = Database.getInstance();
+        db.enableTestMode();
+        db.clear();
+        assertNotNull("Contacts list should not be null before pulling.", db.getAllContacts());
+        assertTrue("Contacts list should be empty after clear", db.getAllContacts().size() == 0);
+        db.pull();
+        assertNotNull("Contacts list should not be null after pulling.", db.getAllContacts());
+        assertTrue("Contacts list should contain at least 1 conversation after pulling.", db.getAllContacts().size() > 0);
+    }
+
+    /**
+     * Test saveContact
+     */
+    public void test_saveContact() {
+        Database db = Database.getInstance();
+        db.enableTestMode();
+        db.clear();
+        db.pull();
+
+        Map contactInformationMap = new HashMap<String, String>();
+        contactInformationMap.put(ContactRecord.EID_COL, "ae22675");
+        contactInformationMap.put(ContactRecord.FIRST_NAME, "Adam");
+        contactInformationMap.put(ContactRecord.LAST_NAME, "Estrin");
+        contactInformationMap.put(ContactRecord.PHONE_NUMBER_COL, "5163533154");
+        ContactRecord test = new ContactRecord(contactInformationMap);
+        db.saveContact(test);
     }
 
     /**

@@ -86,6 +86,8 @@ public class ContactRecord extends Record {
       */
     @Override
     public String toJSONString(){
+        // XXX Greg 1/16/2017 : Inlude other fields if necessary.
+
         JSONObject json = new JSONObject();
         json.put("eid", this._eid);
         json.put("first_name", this._firstName);
