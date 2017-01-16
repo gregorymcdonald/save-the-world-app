@@ -8,6 +8,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
+import java.util.Map;
+import java.util.HashMap;
 
 public class JSONUtilities {
 
@@ -27,6 +29,27 @@ public class JSONUtilities {
             }
         }
         return result;
+    }
+
+    /**
+     * Converts a JSONObject to a ContactRecord.
+     * @param firebaseId The unique ID assigned to the Firebase JSON object.
+     * @param json A JSONObject representing the ContactRecord.
+     * @return A ContactRecord containing the data in the input JSON.
+     */
+    public static ContactRecord convertJSONToContactRecord(String firebaseId, JSONObject json){
+        String eid = (String) json.get("eid");
+        String firstName = (String) json.get("first_name");
+        String lastName = (String) json.get("last_name");
+        String phoneNumber = (String) json.get("phone_number");
+
+        Map contactInformationMap = new HashMap<String, String>();
+        contactInformationMap.put(ContactRecord.EID_COL, eid);
+        contactInformationMap.put(ContactRecord.FIRST_NAME, firstName);
+        contactInformationMap.put(ContactRecord.LAST_NAME, lastName);
+        contactInformationMap.put(ContactRecord.PHONE_NUMBER_COL, phoneNumber);
+
+        return new ContactRecord(contactInformationMap);
     }
 
     /**
@@ -63,7 +86,8 @@ public class JSONUtilities {
         String from = (String) json.get("from");
         String body = (String) json.get("body");
         Long timestamp = (Long) json.get("timestamp");
+        Boolean read = (json.get("read") != null) ? ((Boolean) json.get("read")) : false;
 
-        return new MessageRecord(firebaseId, to, from, body, new Date(timestamp));
+        return new MessageRecord(firebaseId, to, from, body, new Date(timestamp), read);
     }
 }

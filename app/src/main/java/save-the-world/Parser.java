@@ -30,9 +30,9 @@ public class Parser {
 
     private static final String CUT_OFF_DATE = "10/31/2016 00:00";
 
-	public static ArrayList <Contact> parseFile() {
+	public static ArrayList <ContactRecord> parseFile() {
 
-		ArrayList <Contact> contacts = new ArrayList<Contact>();
+		ArrayList <ContactRecord> contacts = new ArrayList<ContactRecord>();
 
 		try {
 			Reader in = new FileReader(LOCAL_FILE);
@@ -47,12 +47,16 @@ public class Parser {
 					Boolean validTimeStamp = sdf.parse(timeStamp).after(sdf.parse(CUT_OFF_DATE));
 					if(validTimeStamp) {
 						splitName(record.get(NAME_COL), entry);
-						Contact c = new Contact(entry);
+						ContactRecord c = new ContactRecord(entry);
 						contacts.add(c);
 					}
 				} catch (ParseException e) {
 					System.out.println("INVALID CSV ENTRY...");
 				}
+				splitName(record.get(NAME_COL), entry);
+
+				ContactRecord c = new ContactRecord(entry);
+				contacts.add(c);
 			}
 		} catch (IOException e) {
 			System.out.println("CSV FILE NOT FOUND...");

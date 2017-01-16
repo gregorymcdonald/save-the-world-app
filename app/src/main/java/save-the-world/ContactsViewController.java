@@ -17,84 +17,84 @@ import javafx.collections.FXCollections;
 import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 
-public class ContactsViewController implements ControlledScreen {
+public class ContactsViewController {
 
 
-	private ScreensController controller;
+	// private ScreensController controller;
 
-    @FXML
-    private ResourceBundle resources;
+ //    @FXML
+ //    private ResourceBundle resources;
 
-    @FXML
-    private URL location;
+ //    @FXML
+ //    private URL location;
 
-    @FXML
-    private AnchorPane containerAnchorPane;
+ //    @FXML
+ //    private AnchorPane containerAnchorPane;
 
-    @FXML
-    private JFXButton newContactBtn;
+ //    @FXML
+ //    private JFXButton newContactBtn;
 
-    @FXML
-    private JFXButton downloadIFCBtn;
+ //    @FXML
+ //    private JFXButton downloadIFCBtn;
 
-    @FXML
-    private JFXTreeTableView <Contact> tableView;
+ //    @FXML
+ //    private JFXTreeTableView <ContactRecord> tableView;
 
-    @FXML
-    void addNewContactAction(MouseEvent event) {
+ //    @FXML
+ //    void addNewContactAction(MouseEvent event) {
 
-    }
+ //    }
 
-    @FXML
-    void downloadIFCAction(MouseEvent event) {
+ //    @FXML
+ //    void downloadIFCAction(MouseEvent event) {
     	
-    }
+ //    }
 
-    @FXML
-    void initialize() {
-        assert containerAnchorPane != null : "fx:id=\"containerAnchorPane\" was not injected: check your FXML file 'ContactsView.fxml'.";
-        assert newContactBtn != null : "fx:id=\"newContactBtn\" was not injected: check your FXML file 'ContactsView.fxml'.";
-        assert downloadIFCBtn != null : "fx:id=\"downloadIFCBtn\" was not injected: check your FXML file 'ContactsView.fxml'.";
-        assert tableView != null : "fx:id=\"tableView\" was not injected: check your FXML file 'ContactsView.fxml'.";
+ //    @FXML
+ //    void initialize() {
+ //        assert containerAnchorPane != null : "fx:id=\"containerAnchorPane\" was not injected: check your FXML file 'ContactsView.fxml'.";
+ //        assert newContactBtn != null : "fx:id=\"newContactBtn\" was not injected: check your FXML file 'ContactsView.fxml'.";
+ //        assert downloadIFCBtn != null : "fx:id=\"downloadIFCBtn\" was not injected: check your FXML file 'ContactsView.fxml'.";
+ //        assert tableView != null : "fx:id=\"tableView\" was not injected: check your FXML file 'ContactsView.fxml'.";
 
-        JFXTreeTableColumn <Contact, String> firstName = new JFXTreeTableColumn<>("First Name");
-    	firstName.setPrefWidth(150);
-    	firstName.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Contact, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Contact, String> param) {
-                return param.getValue().getValue().firstName;
-            }
-        });
+ //        JFXTreeTableColumn <ContactRecord, String> firstName = new JFXTreeTableColumn<>("First Name");
+ //    	firstName.setPrefWidth(150);
+ //    	firstName.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<ContactRecord, String>, ObservableValue<String>>() {
+ //            @Override
+ //            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<ContactRecord, String> param) {
+ //                return param.getValue().getValue().firstName;
+ //            }
+ //        });
 
-        JFXTreeTableColumn <Contact, String> lastName = new JFXTreeTableColumn<>("Last Name");
-    	lastName.setPrefWidth(150);
-    	lastName.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Contact, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Contact, String> param) {
-                return param.getValue().getValue().lastName;
-            }
-        });
+ //        JFXTreeTableColumn <ContactRecord, String> lastName = new JFXTreeTableColumn<>("Last Name");
+ //    	lastName.setPrefWidth(150);
+ //    	lastName.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<ContactRecord, String>, ObservableValue<String>>() {
+ //            @Override
+ //            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<ContactRecord, String> param) {
+ //                return param.getValue().getValue().lastName;
+ //            }
+ //        });
 
-        JFXTreeTableColumn <Contact, String> phoneNumber = new JFXTreeTableColumn<>("Phone Number");
-    	phoneNumber.setPrefWidth(150);
-    	phoneNumber.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Contact, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Contact, String> param) {
-                return param.getValue().getValue().phoneNumber;
-            }
-        });
+ //        JFXTreeTableColumn <ContactRecord, String> phoneNumber = new JFXTreeTableColumn<>("Phone Number");
+ //    	phoneNumber.setPrefWidth(150);
+ //    	phoneNumber.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<ContactRecord, String>, ObservableValue<String>>() {
+ //            @Override
+ //            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<ContactRecord, String> param) {
+ //                return param.getValue().getValue().phoneNumber;
+ //            }
+ //        });
 
-        ObservableList <Contact> contacts = FXCollections.observableArrayList(Parser.parseFile());
+ //        ObservableList <ContactRecord> contacts = FXCollections.observableArrayList(Parser.parseFile());
 
-        final TreeItem <Contact> root = new RecursiveTreeItem <Contact>(contacts, RecursiveTreeObject::getChildren);
-        tableView.getColumns().setAll(firstName, lastName, phoneNumber);
-        tableView.setRoot(root);
-        tableView.setShowRoot(false);
+ //        final TreeItem <ContactRecord> root = new RecursiveTreeItem <ContactRecord>(contacts, RecursiveTreeObject::getChildren);
+ //        tableView.getColumns().setAll(firstName, lastName, phoneNumber);
+ //        tableView.setRoot(root);
+ //        tableView.setShowRoot(false);
 
-        System.out.println("Initialized ContactsViewController...");
-    }
+ //        System.out.println("Initialized ContactsViewController...");
+ //    }
 
-    public void setScreenParent(ScreensController screenParent) {
-    	controller = screenParent;
-    }
+ //    public void setScreenParent(ScreensController screenParent) {
+ //    	controller = screenParent;
+ //    }
 }
