@@ -14,12 +14,14 @@ import javafx.scene.control.Label;
 import javafx.beans.value.ObservableValue;
 import javafx.beans.value.ChangeListener;
 import java.util.List;
+import java.util.HashMap;
 
 public class MessageViewController implements ControlledScreen {
 
     private ScreensController controller;
     private ConversationRecord selectedRecord = null;
-    private static Database db = Database.getInstance();
+    private Database db = Database.getInstance();
+    private HashMap<String, String> phoneNumbers = new HashMap <>();
 
     @FXML
     private ResourceBundle resources;
@@ -57,8 +59,6 @@ public class MessageViewController implements ControlledScreen {
 
         System.out.println("Initilized MessageViewController...");
 
-        loadConversationList();
-
         listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -71,10 +71,12 @@ public class MessageViewController implements ControlledScreen {
 
     public void viewDidLoad() {
         db.pull();
+        loadConversationList();
     }
 
-    public void handleListCellClicked(String cellValue) {
-        this.selectedRecord = Database.getInstance().getConversation(cellValue, "+15162102347");
+    public void handleListCellClicked(String contactName) {
+        String contactPhoneNumer = phoneNumbers.get(contactName);
+        this.selectedRecord = Database.getInstance().getConversation(contactPhoneNumer, "+15162102347");
         loadConversation();
     }
 
@@ -82,8 +84,6 @@ public class MessageViewController implements ControlledScreen {
 
         if(this.selectedRecord == null)
             return;
-
-        db.pull();
 
         conversationList.getItems().clear();
         List<MessageRecord> messages = selectedRecord.getMessages();
@@ -93,7 +93,16 @@ public class MessageViewController implements ControlledScreen {
     }
 
     public void displayMessage(MessageRecord m) {
-        conversationList.getItems().add(m.from + ": " + m.body);
+        ContactRecord c = db.getContact(m.from);
+        String name;
+
+        if(c == null){
+            name = "Me";
+        }else{
+            name = c.getFirstName() + " " + c.getLastName();
+        }
+
+        conversationList.getItems().add(name + ": " + m.body);
     }
 
     public void sendMessage() {
@@ -121,10 +130,17 @@ public class MessageViewController implements ControlledScreen {
 
     public void loadConversationList() {
 
+        listView.getItems().clear();
         List<ConversationRecord> conversations = db.getAllConversations();
 
         for(ConversationRecord c : conversations) {
-            listView.getItems().add(c.participant2);
+            ContactRecord contact = db.getContact(c.participant2);
+            
+            if(contact != null){
+                String name = contact.getFirstName() + " " + contact.getLastName(); 
+                listView.getItems().add(name);
+                phoneNumbers.put(name, c.participant2);
+            }
         }
     }
 

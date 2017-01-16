@@ -22,15 +22,15 @@ public class App {
         Database db = Database.getInstance();
         db.pull();
         
-        ContactRecord result = db.getContact(GREG_PHONE_NUMBER_WITHOUT_EXTENSION);
-        System.out.println(result.toJSONString());
-        Map contactInformationMap = new HashMap<String, String>();
-        contactInformationMap.put(ContactRecord.EID_COL, "ae22675");
-        contactInformationMap.put(ContactRecord.FIRST_NAME, "Adam");
-        contactInformationMap.put(ContactRecord.LAST_NAME, "Estrin");
-        contactInformationMap.put(ContactRecord.PHONE_NUMBER_COL, "5163533154");
-        ContactRecord test = new ContactRecord(contactInformationMap);
-        db.saveContact(test);
+        // ContactRecord result = db.getContact(GREG_PHONE_NUMBER_WITHOUT_EXTENSION);
+        // System.out.println(result.toJSONString());
+        // Map contactInformationMap = new HashMap<String, String>();
+        // contactInformationMap.put(ContactRecord.EID_COL, "ae22675");
+        // contactInformationMap.put(ContactRecord.FIRST_NAME, "Adam");
+        // contactInformationMap.put(ContactRecord.LAST_NAME, "Estrin");
+        // contactInformationMap.put(ContactRecord.PHONE_NUMBER_COL, "5163533154");
+        // ContactRecord test = new ContactRecord(contactInformationMap);
+        // db.saveContact(test);
 
         // Test Conversation Saving
         // Database db = Database.getInstance();

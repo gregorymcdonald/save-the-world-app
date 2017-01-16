@@ -17,7 +17,7 @@ import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.util.Callback;
 import javafx.beans.value.ObservableValue;
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import java.util.ArrayList;
+import java.util.List;
 
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialog.DialogTransition;
@@ -36,6 +36,7 @@ public class ContactsViewController implements ControlledScreen {
     private ScreensController controller;
     private ObservableList<ContactTableViewModel> data;
     private ObservableList<TablePosition> selectedCells = FXCollections.observableArrayList();
+    private Database db = Database.getInstance();
 
     @FXML
     private StackPane stackPane;
@@ -106,11 +107,11 @@ public class ContactsViewController implements ControlledScreen {
         assert lastNameCol != null : "fx:id=\"lastNameCol\" was not injected: check your FXML file 'ContactsView.fxml'.";
         assert stackPane != null : "fx:id=\"stackPane\" was not injected: check your FXML file 'ContactsView.fxml'.";
 
-        //firstNameCol.setMinWidth(100);
+        firstNameCol.setMinWidth(100);
         firstNameCol.setCellValueFactory(
                 new PropertyValueFactory<ContactTableViewModel, String>("firstName"));
  
-        //lastNameCol.setMinWidth(100);
+        lastNameCol.setMinWidth(100);
         lastNameCol.setCellValueFactory(
                 new PropertyValueFactory<ContactTableViewModel, String>("lastName"));
  
@@ -143,6 +144,8 @@ public class ContactsViewController implements ControlledScreen {
 
     /* Called when the view appears on the screen */
     public void viewDidLoad() {
+        db.pull();
+        data.removeAll(data);
         populateContactsTable();
     }
 
@@ -193,7 +196,7 @@ public class ContactsViewController implements ControlledScreen {
     }
 
     private void populateContactsTable() {
-        ArrayList<ContactRecord> contacts = Parser.parseFile();
+        List<ContactRecord> contacts = db.getAllContacts();
         for(ContactRecord c: contacts) {
             ContactTableViewModel model = new ContactTableViewModel();
             model.firstName.set(c.getFirstName());

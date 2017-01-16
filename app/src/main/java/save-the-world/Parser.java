@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.List;
 import java.util.Map;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
@@ -30,11 +31,12 @@ public class Parser {
 
     private static final String CUT_OFF_DATE = "10/31/2016 00:00";
 
-	public static ArrayList <ContactRecord> parseFile() {
+	public static List <ContactRecord> parseFile() {
 
-		int pnmCount = 0;
 		System.out.println("Parsing IFC List...");
 
+		int pnmCount = 0;
+		Database db = Database.getInstance();
 		ArrayList <ContactRecord> contacts = new ArrayList<ContactRecord>();
 
 		try {
@@ -56,6 +58,7 @@ public class Parser {
 						ContactRecord c = new ContactRecord(entry);
 						c.setRecruitmentStatus(ContactRecord.Status.NEW);
 						contacts.add(c);
+						//db.saveContact(c);
 					}
 				} catch (ParseException e) {
 					System.out.println("INVALID CSV ENTRY...");
@@ -91,6 +94,7 @@ public class Parser {
 
 	private static void cleanPhoneNumber(String phoneNumber, Map<String, String> entry) {
 		String cleanNumber = phoneNumber.replaceAll("[^0-9]","");
+		cleanNumber = "+1" + cleanNumber;
 		entry.put(PHONE_NUMBER_COL, cleanNumber);
 	}
 

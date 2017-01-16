@@ -64,11 +64,14 @@ public class Database {
         }
         String conversationsJsonString = FirebaseUtilities.readDataFromFirebase(conversationsUrl);
         JSONObject conversationsJsonObject = JSONUtilities.createJSONObject(conversationsJsonString);
-        Set<String> conversationKeys = (Set<String>) conversationsJsonObject.keySet();
-        int numConversations = conversationKeys.size();
-        System.out.println(numConversations + " conversation(s) found.");
-        for(String conversationKey : conversationKeys){
-            conversations.add(JSONUtilities.convertJSONToConversationRecord(conversationKey, (JSONObject)conversationsJsonObject.get(conversationKey)));
+        if(conversationsJsonObject != null){
+            Set<String> conversationKeys = (Set<String>) conversationsJsonObject.keySet();
+            int numConversations = conversationKeys.size();
+            System.out.println(numConversations + " conversation(s) found.");
+
+            for(String conversationKey : conversationKeys){
+                conversations.add(JSONUtilities.convertJSONToConversationRecord(conversationKey, (JSONObject)conversationsJsonObject.get(conversationKey)));
+            }
         }
 
         // Read all contact(s) from Firebase
