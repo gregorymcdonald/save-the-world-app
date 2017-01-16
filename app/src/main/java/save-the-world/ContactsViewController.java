@@ -38,16 +38,10 @@ public class ContactsViewController implements ControlledScreen {
     private ObservableList<TablePosition> selectedCells = FXCollections.observableArrayList();
 
     @FXML
-    private ResourceBundle resources;
-
-    @FXML
-    private URL location;
+    private StackPane stackPane;
 
     @FXML
     private AnchorPane containerAnchorPane;
-
-    @FXML
-    private StackPane stackPane;
 
     @FXML
     private JFXButton newMassMessageBtn;
@@ -199,8 +193,8 @@ public class ContactsViewController implements ControlledScreen {
     }
 
     private void populateContactsTable() {
-        ArrayList<Contact> contacts = Parser.parseFile();
-        for(Contact c: contacts) {
+        ArrayList<ContactRecord> contacts = Parser.parseFile();
+        for(ContactRecord c: contacts) {
             ContactTableViewModel model = new ContactTableViewModel();
             model.firstName.set(c.getFirstName());
             model.lastName.set(c.getLastName());
@@ -234,8 +228,3 @@ public class ContactsViewController implements ControlledScreen {
 
 
 } 
-
-
-
-
-

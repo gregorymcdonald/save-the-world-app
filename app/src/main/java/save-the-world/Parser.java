@@ -30,11 +30,12 @@ public class Parser {
 
     private static final String CUT_OFF_DATE = "10/31/2016 00:00";
 
-	public static ArrayList <Contact> parseFile() {
+	public static ArrayList <ContactRecord> parseFile() {
 
-		ArrayList <Contact> contacts = new ArrayList<Contact>();
 		int pnmCount = 0;
 		System.out.println("Parsing IFC List...");
+
+		ArrayList <ContactRecord> contacts = new ArrayList<ContactRecord>();
 
 		try {
 			Reader in = new FileReader(LOCAL_FILE);
@@ -52,8 +53,8 @@ public class Parser {
 						splitName(record.get(NAME_COL), entry);
 						cleanPhoneNumber(record.get(PHONE_NUMBER_COL), entry);
 
-						Contact c = new Contact(entry);
-						c.setRecruitmentStatus(Contact.Status.NEW);
+						ContactRecord c = new ContactRecord(entry);
+						c.setRecruitmentStatus(ContactRecord.Status.NEW);
 						contacts.add(c);
 					}
 				} catch (ParseException e) {

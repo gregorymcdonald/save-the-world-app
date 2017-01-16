@@ -15,8 +15,11 @@ public class Database {
     // If enabled, remote is stored at a different location as to not clobber the real data.
     private boolean testMode;
 
-    // All ConversationRecord(s) in the database
+    // All ConversationRecord(s) in the database.
     List<ConversationRecord> conversations;
+
+    // All ContactRecord(s) in the database.
+    List<ContactRecord> contacts;
 
     /**
      * Singleton instance constructor.
@@ -24,6 +27,7 @@ public class Database {
     private Database(){
         testMode = false;
         conversations = new ArrayList<ConversationRecord>();
+        contacts = new ArrayList<ContactRecord>();
     }
 
     /**
@@ -40,14 +44,15 @@ public class Database {
     public void clear(){
         System.out.println("Clearing local database...");
         conversations = new ArrayList<ConversationRecord>();
+        contacts = new ArrayList<ContactRecord>();
     }
 
     /**
      * Update the local copy of the database from the remote. Overrides all local changes that have not been pushed.
      */
     public void pull(){
+        clear();
         System.out.println("Copying database from remote...");
-        conversations = new ArrayList<ConversationRecord>();
 
         // Read all conversations from Firebase
         System.out.println("Reading conversations...");
@@ -59,13 +64,23 @@ public class Database {
         }
         String conversationsJsonString = FirebaseUtilities.readDataFromFirebase(conversationsUrl);
         JSONObject conversationsJsonObject = JSONUtilities.createJSONObject(conversationsJsonString);
-
         Set<String> conversationKeys = (Set<String>) conversationsJsonObject.keySet();
         int numConversations = conversationKeys.size();
         System.out.println(numConversations + " conversation(s) found.");
-
         for(String conversationKey : conversationKeys){
             conversations.add(JSONUtilities.convertJSONToConversationRecord(conversationKey, (JSONObject)conversationsJsonObject.get(conversationKey)));
+        }
+
+        // Read all contact(s) from Firebase
+        System.out.println("Reading contacts...");
+        String contactsUrl = getContactsFirebaseUrl() + ".json";
+        String contactsJsonString = FirebaseUtilities.readDataFromFirebase(contactsUrl);
+        JSONObject contactsJsonObject = JSONUtilities.createJSONObject(contactsJsonString);
+        Set<String> contactKeys = (Set<String>) contactsJsonObject.keySet();
+        int numContacts = contactKeys.size();
+        System.out.println(numContacts + " contact(s) found.");
+        for(String contactKey : contactKeys){
+            contacts.add(JSONUtilities.convertJSONToContactRecord(contactKey, (JSONObject)contactsJsonObject.get(contactKey)));
         }
     }
 
@@ -74,12 +89,7 @@ public class Database {
      */
     public void push(){
         System.out.println("Overriding remote database with local copy...");
-        String conversationsURL;
-        if(!testMode){
-            conversationsURL = FirebaseUtilities.FIREBASE_URL + "/conversations.json";
-        } else {
-            conversationsURL = FirebaseUtilities.FIREBASE_URL + "/test_conversations.json";
-        }
+        String conversationsURL = getConversationsFirebaseUrl() + ".json";
 
         // Convert list of ConversationRecord(s) into a JSONObject
         JSONObject conversationsJsonObject = new JSONObject();
@@ -102,6 +112,28 @@ public class Database {
         String currentTimeInMilliseconds = "" + System.currentTimeMillis();
         String lastUpdatedWriteResult = FirebaseUtilities.writeDataToFirebase(lastUpdatedURL, currentTimeInMilliseconds);
         System.out.println("Remote database now last updated at time: " + lastUpdatedWriteResult);
+    }
+
+    /**
+     * Get a single contact from the local copy of the database.
+     * @param phoneNumber A String containing a phone number of the contact.
+     * @return A ContactRecord with matching phone number.
+     */
+    public ContactRecord getContact(String phoneNumber){
+        for(ContactRecord contactRecord : contacts){
+            if(phoneNumber.equals(contactRecord.getPhoneNumber())){
+                return contactRecord;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Get a list of all contact(s) stored in the local copy of the database.
+     * @return A list of all contact(s) stored in the local database, represented as ContactRecord(s).
+     */
+    public List<ContactRecord> getAllContacts(){
+        return new ArrayList<ContactRecord>(contacts);
     }
 
     /**
@@ -129,13 +161,40 @@ public class Database {
     }
 
     /**
-     * Save a single conversation to the local copy of the database.
+     * Save a single contact to the local and remote copy of the database.
+     * @param contactRecord The ContactRecord to save.
+     */
+    public void saveContact(ContactRecord contactRecord){
+        if(contactRecord == null){
+            return;
+        }
+        contacts.remove(contactRecord);
+
+        // Assign unique ID to the conversation if it does not have one
+        String contactId = contactRecord.getId();
+        if(contactId == null || contactId.length() <= 0){
+            contactRecord.setId(FirebaseUtilities.generateUniqueId());
+        }
+
+        contacts.add(contactRecord);
+
+        // Save the contact in the remote database
+        String contactUrl = getContactsFirebaseUrl() + "/" + contactRecord.getId() + ".json";
+        System.out.println("Saving contact: " + contactRecord.toJSONString() + " to " + contactUrl);
+        String contactWriteResult = FirebaseUtilities.writeDataToFirebase(contactUrl, contactRecord.toJSONString());
+        //System.out.println(contactWriteResult);
+    }
+
+    /**
+     * Save a single conversation to the local and remote copy of the database.
      * @param conversationRecord The ConversationRecord to save.
      */
     public void saveConversation(ConversationRecord conversationRecord){
         if(conversationRecord == null){
             return;
         }
+
+        conversations.remove(conversationRecord);
 
         // Assign unique ID to the conversation if it does not have one
         String conversationId = conversationRecord.getId();
@@ -153,19 +212,29 @@ public class Database {
                 conversationRecord.addMessage(message);
             }
         }
-
         conversations.add(conversationRecord);
 
         // Save the conversation in the remote database
-        String conversationURL;
-        if(!testMode){
-            conversationURL = FirebaseUtilities.FIREBASE_URL + "/conversations/";
-        } else {
-            conversationURL = FirebaseUtilities.FIREBASE_URL + "/test_conversations/";
-        }
-        conversationURL += conversationRecord.getId() + ".json";
+        String conversationURL = getConversationsFirebaseUrl() + "/" + conversationRecord.getId() + ".json";
         String conversationWriteResult = FirebaseUtilities.writeDataToFirebase(conversationURL, conversationRecord.toJSONString());
         //System.out.println(conversationWriteResult);
+    }
+
+    /**
+     * Save a single message to the local copy of the database.
+     * @param messageRecord The MessageRecord to save.
+     */
+    public void saveMessage(MessageRecord messageRecord){
+        if(messageRecord == null){
+            return;
+        }
+
+        ConversationRecord conv = this.getConversation(messageRecord.to, messageRecord.from);
+        if(conv == null) {
+            conv = new ConversationRecord(messageRecord.to, messageRecord.from, null);
+        }
+        conv.addMessage(messageRecord);
+        this.saveConversation(conv);
     }
 
     /**
@@ -180,5 +249,21 @@ public class Database {
      */
     public void disableTestMode(){
         this.testMode = false;
+    }
+
+    private String getContactsFirebaseUrl(){
+        if(!testMode){
+            return FirebaseUtilities.FIREBASE_URL + "/contacts";
+        } else {
+            return FirebaseUtilities.FIREBASE_URL + "/test_contacts";
+        }
+    }
+
+    private String getConversationsFirebaseUrl(){
+        if(!testMode){
+            return FirebaseUtilities.FIREBASE_URL + "/conversations";
+        } else {
+            return FirebaseUtilities.FIREBASE_URL + "/test_conversations";
+        }
     }
 }

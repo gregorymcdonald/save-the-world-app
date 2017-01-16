@@ -14,29 +14,36 @@ public class MessageRecord extends Record implements Comparable<MessageRecord> {
     public String body;
     // NOTE: this timestamp should be treated as immutable
     public Date timestamp;
+    public boolean read;
 
     public MessageRecord(String to, String from, String body) {
-        this(to, from, body, new Date());
+        this(to, from, body, new Date(), false);
     }
 
-    public MessageRecord(String id, String to, String from, String body) {
-        this(id, to, from, body, new Date());
+    public MessageRecord(String to, String from, String body, boolean read) {
+        this(to, from, body, new Date(), read);
     }
 
-    public MessageRecord(String to, String from, String body, Date timestamp) {
+    public MessageRecord(String id, String to, String from, String body, boolean read) {
+        this(id, to, from, body, new Date(), read);
+    }
+
+    public MessageRecord(String to, String from, String body, Date timestamp, boolean read) {
         super();
         this.to = to;
         this.from = from;
         this.body = body;
         this.timestamp = timestamp;
+        this.read = read;
     }
 
-    public MessageRecord(String id, String to, String from, String body, Date timestamp) {
+    public MessageRecord(String id, String to, String from, String body, Date timestamp, boolean read) {
         super(id);
         this.to = to;
         this.from = from;
         this.body = body;
         this.timestamp = timestamp;
+        this.read = read;
     }
 
     public MessageRecord(MessageRecord messageRecord){
@@ -45,6 +52,7 @@ public class MessageRecord extends Record implements Comparable<MessageRecord> {
         this.from = messageRecord.from;
         this.body = messageRecord.body;
         this.timestamp = messageRecord.timestamp;
+        this.read = read;
     }
 
     @Override
@@ -80,6 +88,7 @@ public class MessageRecord extends Record implements Comparable<MessageRecord> {
         json.put("to", this.to);
         json.put("from", this.from);
         json.put("timestamp", this.timestamp.getTime());
+        json.put("read", this.read);
         return json.toJSONString();
     }
 }
