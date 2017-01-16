@@ -16,7 +16,7 @@ public class App {
     private static final String KIERAN_PHONE_NUMBER = "+17136208645";
 
     public static void main(String[] args) {
-        // Test Firebase
+        // Pull db when app launches
         Database db = Database.getInstance();
         db.pull();
         // ConversationRecord result = db.getConversation(TWILIO_PHONE_NUMBER, GREG_PHONE_NUMBER);

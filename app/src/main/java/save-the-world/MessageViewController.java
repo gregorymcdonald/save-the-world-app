@@ -56,7 +56,7 @@ public class MessageViewController implements ControlledScreen {
 
         System.out.println("Initilized MessageViewController...");
 
-        populateConversationList();
+        loadConversationList();
 
         listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -86,18 +86,37 @@ public class MessageViewController implements ControlledScreen {
     }
 
     public void displayMessage(MessageRecord m) {
-        conversationList.getItems().add("From: " + m.to + ", to: " + m.from  + ", body: " + m.body);
+        conversationList.getItems().add(m.from + ": " + m.body);
     }
 
     public void sendMessage() {
-        String messageBody = messageField.getText();
-        MessageRecord newMessage = new MessageRecord(selectedRecord.participant2, selectedRecord.participant1, messageBody);
-        selectedRecord.addMessage(newMessage);
-        displayMessage(newMessage);
+
+        //ensure there is a message in the text field
+        if(messageField.getText() != null && messageField.getText().trim().isEmpty()){
+
+            //grab the message body from teh text field
+            String messageBody = messageField.getText();
+
+            //Send actual message to selected 
+            Messenger messenger = Messenger.getInstance();
+            MessageRecord newMessage = messenger.sendSMS(selectedRecord.participant2, messageBody);
+
+            //Uppon successfully sending message save message to the ConversationRecord, save the local Database and then push 
+            if (newMessage != null) {
+                Database db = Database.getInstance();
+                selectedRecord.addMessage(newMessage);
+                db.saveConversation(selectedRecord);
+                db.push();
+                displayMessage(newMessage); 
+            } else{
+                //notify the user there was some sore of error sending message
+            }
+        }
+
         messageField.clear();
     }
 
-    public void populateConversationList() {
+    public void loadConversationList() {
         List<ConversationRecord> conversations = Database.getInstance().getAllConversations();
 
         for(ConversationRecord c : conversations) {

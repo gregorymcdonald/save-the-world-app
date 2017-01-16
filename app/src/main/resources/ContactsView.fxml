@@ -4,16 +4,21 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
 
 <AnchorPane fx:id="containerAnchorPane" prefHeight="361.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.savetheworld.ContactsViewController">
    <children>
-      <JFXButton fx:id="newContactBtn" buttonType="RAISED" layoutX="527.0" layoutY="320.0" onMouseClicked="#addNewContactAction" ripplerFill="#ab2d2d" text="Add New Contact" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
-      <JFXButton fx:id="downloadIFCBtn" buttonType="RAISED" layoutX="14.0" layoutY="320.0" onMouseClicked="#downloadIFCAction" text="Downlod IFC" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" />
-      <TableView fx:id="tableView" prefHeight="315.0" prefWidth="600.0" AnchorPane.bottomAnchor="46.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <columns>
-          <TableColumn fx:id="firstNameCol" prefWidth="75.0" text="First Name" />
-          <TableColumn fx:id="lastNameCol" prefWidth="75.0" text="Last Name" />
-        </columns>
-      </TableView>
+      <JFXButton fx:id="newMassMessageBtn" buttonType="RAISED" layoutX="527.0" layoutY="320.0" onMouseClicked="#newMassMessageHandler" ripplerFill="#ab2d2d" text="Send New Message" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+      <JFXButton fx:id="clearSelectedBtn" buttonType="RAISED" layoutX="14.0" layoutY="320.0" onMouseClicked="#clearSelectedHandler" text="Clear Selected" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" />
+      <StackPane fx:id="stackPane" layoutX="-5.0" layoutY="-1.0" prefHeight="325.0" prefWidth="610.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <TableView fx:id="tableView" prefHeight="315.0" prefWidth="600.0">
+              <columns>
+                <TableColumn fx:id="firstNameCol" prefWidth="75.0" text="First Name" />
+                <TableColumn fx:id="lastNameCol" prefWidth="75.0" text="Last Name" />
+              </columns>
+            </TableView>
+         </children>
+      </StackPane>
    </children>
 </AnchorPane>

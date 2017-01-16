@@ -16,7 +16,6 @@ import org.apache.commons.csv.CSVRecord;
 
 public class Parser {
 
-
 	private static final String LOCAL_FILE = "IFC_LIST.csv";
 	private static final String HOME_DIRECTORY = System.getProperty("user.home"); 
 
