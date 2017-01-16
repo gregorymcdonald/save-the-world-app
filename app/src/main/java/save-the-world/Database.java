@@ -129,7 +129,7 @@ public class Database {
     }
 
     /**
-     * Save a single conversation to the local copy of the database.
+     * Save a single conversation to the local and remote copy of the database.
      * @param conversationRecord The ConversationRecord to save.
      */
     public void saveConversation(ConversationRecord conversationRecord){
@@ -166,6 +166,23 @@ public class Database {
         conversationURL += conversationRecord.getId() + ".json";
         String conversationWriteResult = FirebaseUtilities.writeDataToFirebase(conversationURL, conversationRecord.toJSONString());
         //System.out.println(conversationWriteResult);
+    }
+
+    /**
+     * Save a single message to the local copy of the database.
+     * @param messageRecord The MessageRecord to save.
+     */
+    public void saveMessage(MessageRecord messageRecord){
+        if(messageRecord == null){
+            return;
+        }
+
+        ConversationRecord conv = this.getConversation(messageRecord.to, messageRecord.from);
+        if(conv == null) {
+            conv = new ConversationRecord(messageRecord.to, messageRecord.from, null);
+        }
+        conv.addMessage(messageRecord);
+        this.saveConversation(conv);
     }
 
     /**

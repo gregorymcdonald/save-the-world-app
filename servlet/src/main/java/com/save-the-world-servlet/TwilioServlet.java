@@ -44,12 +44,7 @@ public class TwilioServlet extends HttpServlet {
         MessageRecord messageRecord = new MessageRecord(messageTo, messageFrom, messageBody);
         Database db = Database.getInstance();
         db.pull();
-        ConversationRecord conv = db.getConversation(messageTo, messageFrom);
-        if(conv == null) {
-            conv = new ConversationRecord(messageTo, messageFrom, null);
-        }
-        conv.addMessage(messageRecord);
-        db.saveConversation(conv);
+        db.saveMessage(messageRecord);
         db.push();
 
         // Send a response SMS message

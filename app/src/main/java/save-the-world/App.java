@@ -26,7 +26,7 @@ public class App {
         System.out.println(result.toJSONString());
 
         ConversationRecord test = new ConversationRecord(TWILIO_PHONE_NUMBER, ADAM_PHONE_NUMBER, null);
-        test.addMessage(new MessageRecord(ADAM_PHONE_NUMBER, TWILIO_PHONE_NUMBER, "Hi Adam!", new Date()));
+        test.addMessage(new MessageRecord(ADAM_PHONE_NUMBER, TWILIO_PHONE_NUMBER, "Hi Adam!", new Date(), false));
         db.saveConversation(test);
         db.push();
 

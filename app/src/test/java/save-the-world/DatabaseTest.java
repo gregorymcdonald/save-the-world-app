@@ -74,7 +74,7 @@ public class DatabaseTest extends TestCase {
         db.pull();
         int numConversationsBeforePush = db.getAllConversations().size();
         ConversationRecord test = new ConversationRecord(TWILIO_PHONE_NUMBER, ADAM_PHONE_NUMBER, null);
-        test.addMessage(new MessageRecord(ADAM_PHONE_NUMBER, TWILIO_PHONE_NUMBER, "Hi Adam!", new Date()));
+        test.addMessage(new MessageRecord(ADAM_PHONE_NUMBER, TWILIO_PHONE_NUMBER, "Hi Adam!", new Date(), false));
         db.saveConversation(test);
         db.push();
         db.clear();
@@ -103,7 +103,7 @@ public class DatabaseTest extends TestCase {
         db.enableTestMode();
         db.clear();
         ConversationRecord test = new ConversationRecord(TWILIO_PHONE_NUMBER, ADAM_PHONE_NUMBER, null);
-        test.addMessage(new MessageRecord(ADAM_PHONE_NUMBER, TWILIO_PHONE_NUMBER, "Hi Adam!", new Date()));
+        test.addMessage(new MessageRecord(ADAM_PHONE_NUMBER, TWILIO_PHONE_NUMBER, "Hi Adam!", new Date(), false));
         db.saveConversation(test);
         ConversationRecord result = db.getConversation(test.participant1, test.participant2);
         assertEquals("Saved conversation should be equal to retrieved conversation.", test, result);

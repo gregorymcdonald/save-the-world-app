@@ -63,7 +63,8 @@ public class JSONUtilities {
         String from = (String) json.get("from");
         String body = (String) json.get("body");
         Long timestamp = (Long) json.get("timestamp");
+        Boolean read = (json.get("read") != null) ? ((Boolean) json.get("read")) : false;
 
-        return new MessageRecord(firebaseId, to, from, body, new Date(timestamp));
+        return new MessageRecord(firebaseId, to, from, body, new Date(timestamp), read);
     }
 }

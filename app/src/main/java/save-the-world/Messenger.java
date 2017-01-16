@@ -46,7 +46,7 @@ public class Messenger {
             }
         }
 
-        return validArguments ? new MessageRecord(null, toPhoneNumber, TWILIO_PHONE_NUMBER, messageBody, new Date()) : null;
+        return validArguments ? new MessageRecord(null, toPhoneNumber, TWILIO_PHONE_NUMBER, messageBody, new Date(), false) : null;
     }
 
     // Helper Method(s)
