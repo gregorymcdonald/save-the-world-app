@@ -1,8 +1,9 @@
 package com.savetheworld;
 
 import java.util.Map;
+import org.json.simple.JSONObject;
 
-public class Contact {
+public class ContactRecord extends Record {
 
     // CSV Column Name Constants
     public static final String NAME_COL = "Name";
@@ -47,7 +48,7 @@ public class Contact {
     private Status _recruitmentStatus;
     
     // Should not use this constructor other than to test
-    public Contact() {
+    public ContactRecord() {
         _eid = null;
         _firstName = null;
         _lastName = null;
@@ -64,7 +65,7 @@ public class Contact {
     }
     
     // Primary constructor; should always be used
-    public Contact(Map <String, String> record) {
+    public ContactRecord(Map <String, String> record) {
         _eid = record.get(EID_COL);
         _firstName = record.get(FIRST_NAME);
         _lastName = record.get(LAST_NAME);
@@ -79,6 +80,20 @@ public class Contact {
         _classification = record.get(CLASSIFICATION_COL);
     }
     
+    /**
+     * Returns a string representation of this ContactRecord in JSON format.
+     * @return A String representation of this ContactRecord in JSON format.
+      */
+    @Override
+    public String toJSONString(){
+        JSONObject json = new JSONObject();
+        json.put("eid", this._eid);
+        json.put("first_name", this._firstName);
+        json.put("last_name", this._lastName);
+        json.put("phone_number", this._phoneNumber);
+        return json.toJSONString();
+    }
+
     // Begin massive list of getters and setters
     // Get/Set EID
     public String getEid() {

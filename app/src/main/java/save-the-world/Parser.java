@@ -21,9 +21,9 @@ public class Parser {
     public static final String LAST_NAME = "last-name";
     public static final String NAME_COL = "Name";
 
-	public static ArrayList <Contact> parseFile() {
+	public static ArrayList <ContactRecord> parseFile() {
 
-		ArrayList <Contact> contacts = new ArrayList<Contact>();
+		ArrayList <ContactRecord> contacts = new ArrayList<ContactRecord>();
 
 		try {
 			Reader in = new FileReader(LOCAL_FILE);
@@ -33,7 +33,7 @@ public class Parser {
 				Map <String, String> entry = record.toMap();
 				splitName(record.get(NAME_COL), entry);
 
-				Contact c = new Contact(entry);
+				ContactRecord c = new ContactRecord(entry);
 				contacts.add(c);
 			}
 		} catch (IOException e) {
